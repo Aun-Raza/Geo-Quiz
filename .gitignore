@@ -1,3 +1,13 @@
+app.js
 node_modules
+package-lock.json
 yarn.lock
-*.js
+/config/*.js
+/config/*.json
+/controllers/*.js
+/interfaces/*.js
+/log/*.js
+/models/*.js
+/models/subSchemas/*.js
+/routes/*.js
+/test/controllers/*.js

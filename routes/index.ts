@@ -1,11 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { getQuizzes } from '../controllers/index';
+import { createQuiz, getQuizzes } from '../controllers/index';
 import logger from '../log/dev-logger';
 import IError from '../interfaces/IError';
 
 const router = express.Router();
 
 router.get('/api/getQuizzes', getQuizzes);
+router.post('/api/createQuiz', createQuiz);
 
 router.use((req, res, next) => {
 	res.status(404);
@@ -15,7 +16,7 @@ router.use((req, res, next) => {
 });
 
 router.use((err: IError, req: Request, res: Response, next: NextFunction) => {
-	logger.error(err.message, { service: err.service });
+	// logger.error(err.message, { service: err.service });
 	res.json({ error: err.message });
 });
 

@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
 		"module": "CommonJS",
-		"moduleResolution": "node",
 		"noImplicitAny": true,
 		"removeComments": true,
 		"sourceMap": false,
-		"target": "ES6",
+		"target": "ES5",
+		"strict": false,
 		"esModuleInterop": true
 	},
 	"exclude": ["node_modules/"]
