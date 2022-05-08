@@ -7,6 +7,7 @@ yarn.lock
 /controllers/*.js
 /interfaces/*.js
 /log/*.js
+/middleware/*.js
 /models/*.js
 /models/subSchemas/*.js
 /routes/*.js

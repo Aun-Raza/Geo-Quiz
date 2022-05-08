@@ -6,7 +6,7 @@
 	"author": "Aun Raza",
 	"license": "MIT",
 	"scripts": {
-		"test": "jest --watchAll --verbose"
+		"test": "jest --verbose"
 	},
 	"dependencies": {
 		"config": "^3.3.7",
