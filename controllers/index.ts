@@ -1,103 +1,92 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { QuizModel, schema } from '../models/index';
-import logger from '../log/dev-logger';
+import log from '../log/dev-logger';
 
-export async function getQuizzes(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
-	logger.info('GET /api/getQuizzes', { service: 'getQuizzes' });
-	try {
-		const result = await QuizModel.find({});
-		if (!result.length) {
-			res.status(404);
-			return next(new Error('no results are found.'));
-		}
-		res.json({ data: result });
-	} catch (error) {
-		res.status(500);
-		next(error);
+/**
+ * GET METHOD(s)
+ */
+export async function getQuizzes(req: Request, res: Response) {
+	log.info('GET /api/getQuizzes', { service: 'getQuizzes' });
+
+	const queries = await QuizModel.find();
+	if (!queries.length) {
+		res.status(404);
+		throw new Error('no quizzes are found.');
 	}
-}
-export async function getQuiz(req: Request, res: Response, next: NextFunction) {
-	logger.info('GET /api/getQuiz/:id', { service: 'getQuiz' });
-	try {
-		const result = await QuizModel.findById(req.params.id);
-		if (!result) {
-			res.status(404);
-			return next(new Error('no result is found'));
-		}
-		res.json({ data: result });
-	} catch (error) {
-		res.status(500);
-		next(error);
-	}
+
+	res.json({ data: queries });
 }
 
-export async function createQuiz(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
-	logger.info('POST /api/createQuiz', { service: 'createQuiz' });
-	try {
-		await schema.validateAsync(req.body || {});
-		let doc = new QuizModel({
-			title: req.body.title,
-			questions: req.body.questions,
-		});
+export async function getQuiz(req: Request, res: Response) {
+	log.info('GET /api/getQuiz/:id', { service: 'getQuiz' });
 
-		const result = await doc.save();
-		res.status(201).json({ data: result });
-	} catch (error) {
-		if (error.isJoi === true) res.status(400);
-		else res.status(500);
-		next(error);
+	const query = await QuizModel.findById(req.params.id);
+	if (!query) {
+		res.status(404);
+		throw new Error('no result is found');
 	}
+
+	res.json({ data: query });
 }
 
-export async function updateQuiz(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
-	logger.info('PUT /api/updateQuiz/:id', { service: 'updateQuiz' });
-	try {
-		const initialResult = await QuizModel.findById(req.params.id);
-		if (!initialResult) {
-			res.status(404);
-			return next(new Error('quiz does not exist'));
-		}
-		await schema.validateAsync(req.body || {});
-		const updatedResult = await QuizModel.findOneAndUpdate(
-			{ initialResult },
-			req.body,
-			{ returnDocument: 'after' }
-		);
-		res.status(201).json({ data: updatedResult });
-	} catch (error) {
-		if (error.isJoi === true) res.status(400);
-		else res.status(500);
-		next(error);
-	}
+/**
+ * POST METHOD(s)
+ */
+
+export async function createQuiz(req: Request, res: Response) {
+	log.info('POST /api/createQuiz', { service: 'createQuiz' });
+
+	await schema.validateAsync(req.body || null).catch((error) => {
+		res.status(400);
+		throw error;
+	});
+
+	let doc = new QuizModel({
+		title: req.body.title,
+		questions: req.body.questions,
+	});
+	doc = await doc.save();
+
+	res.status(201).json({ data: doc });
 }
 
-export async function deleteQuiz(
-	req: Request,
-	res: Response,
-	next: NextFunction
-) {
-	logger.info('DELETE /api/deleteQuiz/:id', { service: 'deleteQuiz' });
-	try {
-		const result = await QuizModel.findByIdAndDelete(req.params.id);
-		if (!result) {
-			res.status(404);
-			return next(new Error('quiz does not exist.'));
-		}
-		res.json({ data: result });
-	} catch (error) {
-		res.status(500);
-		next(error);
+/**
+ * PUT METHOD(s)
+ */
+
+export async function updateQuiz(req: Request, res: Response) {
+	log.info('PUT /api/updateQuiz/:id', { service: 'updateQuiz' });
+
+	const query = await QuizModel.findById(req.params.id);
+	if (!query) {
+		res.status(404);
+		throw new Error('quiz does not exist');
 	}
+
+	await schema.validateAsync(req.body || null).catch((error) => {
+		res.status(400);
+		throw error;
+	});
+
+	const doc = await QuizModel.findOneAndUpdate({ query }, req.body, {
+		returnDocument: 'after',
+	});
+
+	res.status(201).json({ data: doc });
+}
+
+/**
+ * DELETE METHOD(s)
+ */
+
+export async function deleteQuiz(req: Request, res: Response) {
+	log.info('DELETE /api/deleteQuiz/:id', { service: 'deleteQuiz' });
+
+	const doc = await QuizModel.findByIdAndDelete(req.params.id);
+	if (!doc) {
+		res.status(404);
+		throw new Error('quiz does not exist.');
+	}
+
+	res.json({ data: doc });
 }

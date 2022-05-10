@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import router from './routes/index';
 import db from './config/db';
 import { transports } from 'winston';
