@@ -1,5 +1,5 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { QuizModel, schema } from '../models/index';
+import { Request, Response } from 'express';
+import { QuizModel, schema } from '../model';
 import log from '../log';
 
 /**

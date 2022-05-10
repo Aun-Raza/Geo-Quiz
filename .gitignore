@@ -4,11 +4,11 @@ package-lock.json
 yarn.lock
 /config/*.js
 /config/*.json
-/controllers/*.js
-/interfaces/*.js
+/controller/*.js
 /log/*.js
-/middleware/*.js
-/models/*.js
-/models/subSchemas/*.js
+/middleware/auth/*.js
+/middleware/error/*.js
+/model/*.js
+/model/sub-schemas/*.js
 /routes/*.js
-/test/controllers/*.js
+/test/*.js

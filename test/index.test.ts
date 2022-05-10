@@ -1,5 +1,5 @@
-import server from '../../app';
-import { QuizModel } from '../../models/index';
+import server from '../app';
+import { QuizModel } from '../model';
 import mongoose from 'mongoose';
 import config from 'config';
 import request from 'supertest';
@@ -17,6 +17,8 @@ beforeEach(async () => {
 	await QuizModel.deleteMany({});
 });
 
+// Global variables (reuseable)
+
 const true_false = {
 	name: 'true and false question',
 	type: 'True-False',
@@ -32,6 +34,8 @@ const request_body = {
 	title: 'quiz1',
 	questions: [true_false, multiple_choice],
 };
+
+/** GET Method(s) */
 
 describe('GET /api/getQuizzes', () => {
 	it('should return status 404 if result is empty - Failed -', async () => {
@@ -79,6 +83,8 @@ describe('GET /api/getQuiz/:id', () => {
 		expect(body).toHaveProperty('data');
 	});
 });
+
+/** POST Method(s) */
 
 describe('POST /api/createQuiz', () => {
 	it('should return status 400 if req.body is invalid - Failed -', async () => {
@@ -154,6 +160,8 @@ describe('POST /api/createQuiz', () => {
 	});
 });
 
+/** PUT Method(s) */
+
 describe('PUT /api/updateQuiz/:id', () => {
 	it('should return status 400 if req.param is not a ObjectID', async () => {
 		const id = 1;
@@ -207,6 +215,8 @@ describe('PUT /api/updateQuiz/:id', () => {
 		expect(title).toEqual('quiz 1 updated');
 	});
 });
+
+/** DELETE Method(s) */
 
 describe('DELETE /api/deleteQuiz/:id', () => {
 	it('should return status 400 if req.param is not ObjectID', async () => {

@@ -1,6 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
-import router from './routes/index';
+import router from './routes';
 import MongoDB from './config/connect';
 import { transports } from 'winston';
 import config from 'config';
@@ -21,12 +21,13 @@ if (NODE_ENV === 'test') {
 
 const app = express();
 
+app.use(express.urlencoded());
 app.use(express.json());
-
 app.use(router);
 
-const server = app.listen(config.get('PORT'), () => {
-	log.info(`App listening on port: ${8080}`);
+const PORT = config.get('PORT');
+const server = app.listen(PORT, () => {
+	log.info(`App listening on port: ${PORT}`, { service: 'App' });
 });
 
 export default server;

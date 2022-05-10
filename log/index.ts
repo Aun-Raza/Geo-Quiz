@@ -1,4 +1,4 @@
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format } from 'winston';
 const { combine, timestamp, colorize, printf } = format;
 
 const myFormat = printf(({ level, message, timestamp, service }) => {
@@ -6,7 +6,7 @@ const myFormat = printf(({ level, message, timestamp, service }) => {
 });
 
 const log = createLogger({
-	defaultMeta: { service: 'index' },
+	defaultMeta: { service: 'error-handler' },
 	format: combine(
 		colorize(),
 		timestamp({ format: 'YYYY-MM-DD HH:mm' }),

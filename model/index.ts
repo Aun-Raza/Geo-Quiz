@@ -1,10 +1,10 @@
 // @ts-nocheck
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import {
 	AbstractQuestionSchema,
 	TrueAndFalseSchema,
 	MultipleChoiceSchema,
-} from './sub-schema';
+} from './sub-schemas';
 import Joi from 'joi';
 
 interface Quiz {
