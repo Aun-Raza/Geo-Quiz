@@ -12,3 +12,4 @@ yarn.lock
 /model/sub-schemas/*.js
 /routes/*.js
 /test/*.js
+.vscode
