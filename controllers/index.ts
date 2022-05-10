@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { QuizModel, schema } from '../models/index';
-import log from '../log/dev-logger';
+import log from '../log';
 
 /**
  * GET METHOD(s)

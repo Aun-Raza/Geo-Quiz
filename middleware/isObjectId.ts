@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 
-export async function isObjectId(
+export async function isObjectID(
 	req: Request,
 	res: Response,
 	next: NextFunction

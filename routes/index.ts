@@ -6,17 +6,17 @@ import {
 	updateQuiz,
 	deleteQuiz,
 } from '../controllers/index';
-import { isObjectId } from '../middleware/isObjectId';
+import { isObjectID } from '../middleware/isObjectID';
 import IError from '../interfaces/IError';
-import logger from '../log/dev-logger';
+import log from '../log';
 
 const router = express.Router();
 
 router.get('/api/getQuizzes', getQuizzes);
-router.get('/api/getQuiz/:id', isObjectId, getQuiz);
+router.get('/api/getQuiz/:id', isObjectID, getQuiz);
 router.post('/api/createQuiz', createQuiz);
-router.put('/api/updateQuiz/:id', isObjectId, updateQuiz);
-router.delete('/api/deleteQuiz/:id', isObjectId, deleteQuiz);
+router.put('/api/updateQuiz/:id', isObjectID, updateQuiz);
+router.delete('/api/deleteQuiz/:id', isObjectID, deleteQuiz);
 
 router.use((req, res, next) => {
 	res.status(404);
@@ -26,7 +26,7 @@ router.use((req, res, next) => {
 });
 
 router.use((err: IError, req: Request, res: Response, next: NextFunction) => {
-	logger.error(err.message, { service: err.service });
+	log.error(err.message, { service: err.service });
 	res.json({ error: err.message });
 });
 

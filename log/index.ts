@@ -5,7 +5,7 @@ const myFormat = printf(({ level, message, timestamp, service }) => {
 	return `${level}: {service: ${service}} ${message}: {${timestamp}}`;
 });
 
-const logger = createLogger({
+const log = createLogger({
 	defaultMeta: { service: 'index' },
 	format: combine(
 		colorize(),
@@ -14,4 +14,4 @@ const logger = createLogger({
 	),
 });
 
-export default logger;
+export default log;

@@ -4,7 +4,7 @@ import {
 	AbstractQuestionSchema,
 	TrueAndFalseSchema,
 	MultipleChoiceSchema,
-} from './subSchemas/index';
+} from './sub-schema';
 import Joi from 'joi';
 
 interface Quiz {
