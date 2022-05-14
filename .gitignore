@@ -9,7 +9,9 @@ yarn.lock
 /middleware/auth/*.js
 /middleware/error/*.js
 /model/*.js
+/model/joi-validator/*.js
 /model/sub-schemas/*.js
+/model/sub-schemas/functions/*.js
 /routes/*.js
 /test/*.js
 .vscode

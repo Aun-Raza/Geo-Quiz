@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { QuizModel, schema } from '../model';
+import { QuizModel } from '../model';
+import validator from '../model/joi-validator';
 import log from '../log';
 
 /**
@@ -36,7 +37,7 @@ export async function getQuiz(req: Request, res: Response) {
 export async function createQuiz(req: Request, res: Response) {
 	log.info('POST /api/createQuiz', { service: 'createQuiz' });
 
-	await schema.validateAsync(req.body || null).catch((error) => {
+	await validator.validateAsync(req.body || null).catch((error) => {
 		res.status(400);
 		throw error;
 	});
@@ -63,7 +64,7 @@ export async function updateQuiz(req: Request, res: Response) {
 		throw new Error('quiz does not exist');
 	}
 
-	await schema.validateAsync(req.body || null).catch((error) => {
+	await validator.validateAsync(req.body || null).catch((error) => {
 		res.status(400);
 		throw error;
 	});

@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { isDuplicated, isIncluded } from './functions';
 
 interface AbstractQuestion {
 	name: string;
@@ -13,6 +14,11 @@ interface MultipleChoice {
 	answers: [string];
 	correctAnswer: string;
 }
+
+/* 
+	Setting the discriminatorKey's value as the same name 'type' tricks 
+	mongoose into making questionSchema abstract.
+*/
 
 const AbstractQuestionSchema = new Schema<AbstractQuestion>(
 	{
@@ -31,15 +37,26 @@ const TrueAndFalseSchema = new Schema<TrueAndFalse>({
 });
 
 const MultipleChoiceSchema = new Schema<MultipleChoice>({
-	answers: { type: [String], default: undefined, required: true },
+	answers: {
+		type: [String],
+		default: undefined,
+		validate: {
+			validator: (value: string[]) => !isDuplicated(value),
+			message: (answer: { value: string[] }) =>
+				`${answer.value.join(' ')} cannot be duplicated`,
+		},
+		required: true,
+	},
 	correctAnswer: {
 		type: String,
+		validate: {
+			validator: function (value: string) {
+				return isIncluded(value, this.answers);
+			},
+			message: (answer: { value: string }) =>
+				`${answer.value} is not a valid answer`,
+		},
 		required: true,
-		enum: ['a', 'b', 'c'],
-		// function () {
-		// 	console.log('this', this);
-		// 	return this.answers.map((answer: string) => answer);
-		// },
 	},
 });
 

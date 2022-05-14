@@ -5,7 +5,6 @@ import {
 	TrueAndFalseSchema,
 	MultipleChoiceSchema,
 } from './sub-schemas';
-import Joi from 'joi';
 
 interface Quiz {
 	title: string;
@@ -24,25 +23,10 @@ const QuizSchema = new Schema<Quiz>(
 	{ timestamps: true }
 );
 
-const schema = Joi.object({
-	title: Joi.string().min(5).max(25).required(),
-	questions: Joi.array()
-		.items(
-			Joi.object({
-				name: Joi.string().min(5).max(25).required(),
-				type: Joi.string().required(),
-				answers: Joi.array().items(Joi.string()).required(),
-				correctAnswer: Joi.string().required(),
-			}),
-			Joi.object({
-				name: Joi.string().min(5).max(25).required(),
-				type: Joi.string().required(),
-				correctAnswer: Joi.boolean().required(),
-			})
-		)
-		.min(1)
-		.required(),
-});
+/* 
+	This Schema.property.discriminator method tricks mongoose into
+	supporting multiple data types for the QuizSchema.questions field. 
+*/
 
 QuizSchema.path('questions').discriminator('True-False', TrueAndFalseSchema);
 QuizSchema.path('questions').discriminator(
@@ -51,4 +35,4 @@ QuizSchema.path('questions').discriminator(
 );
 
 const QuizModel = model('Quiz', QuizSchema);
-export { QuizModel, schema };
+export { QuizModel };
