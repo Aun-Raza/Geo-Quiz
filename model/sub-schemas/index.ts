@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
-import { isDuplicated, isIncluded } from './functions';
+import { isDuplicated, isIncluded } from '../validators/schema-validator';
 
 interface AbstractQuestion {
 	name: string;

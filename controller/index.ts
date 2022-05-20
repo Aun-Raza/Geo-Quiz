@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { QuizModel } from '../model';
-import validator from '../model/joi-validator';
+import { isMCValid } from '../model/validators/custom-validator';
+import validator from '../model/validators/joi-validator';
 import log from '../log';
 
 /**
@@ -42,10 +43,16 @@ export async function createQuiz(req: Request, res: Response) {
 		throw error;
 	});
 
-	let doc = new QuizModel({
-		title: req.body.title,
-		questions: req.body.questions,
-	});
+	const multipleChoices = req.body.questions.filter(
+		(question: { type: string }) => question.type === 'Multiple-Choice'
+	);
+
+	if (!isMCValid(multipleChoices)) {
+		res.status(400);
+		throw new Error('wrong choices');
+	}
+
+	let doc = new QuizModel(req.body);
 	doc = await doc.save();
 
 	res.status(201).json({ data: doc });
@@ -86,7 +93,7 @@ export async function deleteQuiz(req: Request, res: Response) {
 	const doc = await QuizModel.findByIdAndDelete(req.params.id);
 	if (!doc) {
 		res.status(404);
-		throw new Error('quiz does not exist.');
+		throw new Error('quiz does not exist');
 	}
 
 	res.json({ data: doc });

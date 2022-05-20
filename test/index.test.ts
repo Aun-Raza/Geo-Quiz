@@ -98,6 +98,32 @@ describe('POST /api/createQuiz', () => {
 		expect(statusCode).toBe(400);
 		expect(body).toHaveProperty('error');
 	});
+	it('should return status 400 if multiple choice correctAnswer is invalid', async () => {
+		const clone = { ...request_body };
+		const mc_clone = { ...multiple_choice };
+		mc_clone.correctAnswer = 'e';
+		clone.questions = [mc_clone];
+
+		const { body, statusCode } = await request(app)
+			.post(apiEndPoint)
+			.send(clone);
+
+		expect(statusCode).toBe(400);
+		expect(body).toHaveProperty('error');
+	});
+	it('should return status 400 if multiple choice answers are duplicated', async () => {
+		const clone = { ...request_body };
+		const mc_clone = { ...multiple_choice };
+		mc_clone.answers = ['a', 'b', 'c', 'c', 'd'];
+		clone.questions = [mc_clone];
+
+		const { body, statusCode } = await request(app)
+			.post(apiEndPoint)
+			.send(clone);
+
+		expect(statusCode).toBe(400);
+		expect(body).toHaveProperty('error');
+	});
 	it('should return status 201 if req.body is valid, include only multiple-choice', async () => {
 		request_body.questions = [multiple_choice];
 

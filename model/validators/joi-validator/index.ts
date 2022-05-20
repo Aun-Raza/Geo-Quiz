@@ -3,7 +3,7 @@ import Joi from 'joi';
 const mCValidator = Joi.object({
 	name: Joi.string().min(5).max(25).required(),
 	type: Joi.string().required(),
-	answers: Joi.array().items(Joi.string()).required(),
+	answers: Joi.array().items(Joi.string()).unique().required(),
 	correctAnswer: Joi.string().required(),
 });
 
