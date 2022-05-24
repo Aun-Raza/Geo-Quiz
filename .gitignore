@@ -14,5 +14,8 @@ yarn.lock
 /model/validators/schema-validator/*.js
 /model/validators/joi-validator/*.js
 /routes/*.js
-/test/*.js
+/test/DELETE/*.js
+/test/GET/*.js
+/test/POST/*.js
+/test/PUT/*.js
 .vscode
