@@ -1,5 +1,5 @@
-import app from '../../app';
-import { QuizModel } from '../../model';
+import app from '../../../app';
+import { QuizModel } from '../../../model/quiz';
 import mongoose from 'mongoose';
 import config from 'config';
 import request from 'supertest';

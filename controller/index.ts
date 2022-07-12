@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
-import { QuizModel } from '../model';
-import { isMCValid } from '../model/validators/custom-validator';
-import validator from '../model/validators/joi-validator';
+import { QuizModel } from '../model/quiz';
+import { isMCValid } from '../model/quiz/validators/custom-validator';
+import validator from '../model/quiz/validators/joi-validator';
 import log from '../log';
+
+/** QUIZ SECTION */
 
 /**
  * GET METHOD(s)
@@ -38,12 +40,14 @@ export async function getQuiz(req: Request, res: Response) {
 export async function createQuiz(req: Request, res: Response) {
 	log.info('POST /api/createQuiz', { service: 'createQuiz' });
 
-	await validator.validateAsync(req.body || null).catch((error) => {
-		res.status(400);
-		throw error;
-	});
+	const quiz = await validator
+		.validateAsync(req.body || null)
+		.catch((error) => {
+			res.status(400);
+			throw error;
+		});
 
-	const multipleChoices = req.body.questions.filter(
+	const multipleChoices = quiz.questions.filter(
 		(question: { type: string }) => question.type === 'Multiple-Choice'
 	);
 
@@ -52,7 +56,7 @@ export async function createQuiz(req: Request, res: Response) {
 		throw new Error('wrong choices');
 	}
 
-	let doc = new QuizModel(req.body);
+	let doc = new QuizModel(quiz);
 	doc = await doc.save();
 
 	res.status(201).json({ data: doc });
@@ -71,12 +75,14 @@ export async function updateQuiz(req: Request, res: Response) {
 		throw new Error('quiz does not exist');
 	}
 
-	await validator.validateAsync(req.body || null).catch((error) => {
-		res.status(400);
-		throw error;
-	});
+	const updatedQuiz = await validator
+		.validateAsync(req.body || null)
+		.catch((error) => {
+			res.status(400);
+			throw error;
+		});
 
-	const doc = await QuizModel.findOneAndUpdate({ query }, req.body, {
+	const doc = await QuizModel.findOneAndUpdate({ query }, updatedQuiz, {
 		returnDocument: 'after',
 	});
 
@@ -98,3 +104,5 @@ export async function deleteQuiz(req: Request, res: Response) {
 
 	res.json({ data: doc });
 }
+
+/** USER SECTION */

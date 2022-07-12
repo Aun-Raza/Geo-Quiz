@@ -1,5 +1,5 @@
-import app from '../../app';
-import { QuizModel } from '../../model';
+import app from '../../../app';
+import { QuizModel } from '../../../model/quiz';
 import mongoose from 'mongoose';
 import config from 'config';
 import request from 'supertest';
@@ -34,12 +34,31 @@ const request_body = {
 	],
 };
 
-describe('DELETE /api/deleteQuiz/:id', () => {
-	const apiEndPoint = '/api/deleteQuiz/';
+describe('GET /api/getQuizzes', () => {
+	const apiEndPoint = '/api/getQuizzes';
+	it('should return status 404 if result is empty', async () => {
+		const { body, statusCode } = await request(app).get(apiEndPoint);
+
+		expect(statusCode).toBe(404);
+		expect(body).toHaveProperty('error');
+	});
+	it('should return status 200 if result is not empty', async () => {
+		const doc = new QuizModel(request_body);
+		await doc.save();
+
+		const { body, statusCode } = await request(app).get(apiEndPoint);
+
+		expect(statusCode).toBe(200);
+		expect(body).toHaveProperty('data');
+	});
+});
+
+describe('GET /api/getQuiz/:id', () => {
+	const apiEndPoint = '/api/getQuiz/';
 	it('should return status 400 if req.param is not ObjectID', async () => {
 		const _id = 1;
 
-		const { body, statusCode } = await request(app).delete(apiEndPoint + _id);
+		const { body, statusCode } = await request(app).get(apiEndPoint + _id);
 
 		expect(statusCode).toBe(400);
 		expect(body).toHaveProperty('error');
@@ -47,23 +66,19 @@ describe('DELETE /api/deleteQuiz/:id', () => {
 	it('should return status 404 if req.param is not authenticated', async () => {
 		const _id = new mongoose.Types.ObjectId().toString();
 
-		const { body, statusCode } = await request(app).delete(apiEndPoint + _id);
+		const { body, statusCode } = await request(app).get(apiEndPoint + _id);
 
 		expect(statusCode).toBe(404);
 		expect(body).toHaveProperty('error');
 	});
-	it('should return status 200 if req.param is valid', async () => {
+	it('should return status 200 if req.param is authenticated', async () => {
 		const doc = new QuizModel(request_body);
 		await doc.save();
-
 		const { _id } = doc;
 
-		const { body, statusCode } = await request(app).delete(apiEndPoint + _id);
+		const { body, statusCode } = await request(app).get(apiEndPoint + _id);
 
 		expect(statusCode).toBe(200);
 		expect(body).toHaveProperty('data');
-
-		const res = await QuizModel.findById(_id);
-		expect(res).toBeNull();
 	});
 });
