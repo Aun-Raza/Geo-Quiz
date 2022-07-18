@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
-import { QuizModel } from '../model/quiz';
-import { isMCValid } from '../model/quiz/validators/custom-validator';
-import validator from '../model/quiz/validators/joi-validator';
-import log from '../log';
-
-/** QUIZ SECTION */
+import { QuizModel } from '../../model/quiz/model.quiz';
+import { isMCValid } from '../../model/quiz/validators/custom-validator';
+import validator from '../../model/quiz/validators/joi-validator';
+import log from '../../log';
 
 /**
  * GET METHOD(s)
@@ -104,5 +102,3 @@ export async function deleteQuiz(req: Request, res: Response) {
 
 	res.json({ data: doc });
 }
-
-/** USER SECTION */
