@@ -1,12 +1,14 @@
 {
-	"compilerOptions": {
-		"module": "CommonJS",
-		"noImplicitAny": true,
-		"removeComments": true,
-		"sourceMap": false,
-		"target": "ES5",
-		"strict": false,
-		"esModuleInterop": true
-	},
-	"exclude": ["node_modules/"]
+    "compilerOptions": {
+        "module": "CommonJS",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "sourceMap": false,
+        "target": "ES5",
+        "strict": false,
+        "esModuleInterop": true,
+        "rootDir": "./",
+        "outDir": "./dist"
+    },
+    "exclude": ["node_modules/"]
 }

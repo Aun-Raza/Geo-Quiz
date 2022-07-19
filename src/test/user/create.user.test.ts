@@ -1,6 +1,6 @@
 import app from "../../../app";
 import mongoose from "mongoose";
-import { UserModel } from "../../../model/user/model.user";
+import { UserModel } from "../../model/user/model.user";
 import config from "config";
 import request from "supertest";
 
@@ -22,7 +22,7 @@ beforeEach(async () => {
 let apiEndPoint: string;
 let reqBody: any;
 
-import User from "../User";
+import User from "./User";
 
 async function exec() {
     return await request(app).post(apiEndPoint).send(reqBody);

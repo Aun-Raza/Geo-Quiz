@@ -1,13 +1,13 @@
 import express from "express";
 import "express-async-errors";
-import router from "./routes/route";
+import router from "./src/routes/route";
 import MongoDB from "./config/connect";
 import { transports } from "winston";
 import config from "config";
-import log from "./log";
+import log from "./src/log";
 
 let { NODE_ENV } = process.env;
-NODE_ENV = "test";
+NODE_ENV = "development";
 
 const console = new transports.Console();
 

@@ -1,5 +1,5 @@
 import app from "../../../app";
-import { QuizModel } from "../../../model/quiz/model.quiz";
+import { UserModel } from "../../model/user/model.user";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
@@ -15,63 +15,77 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-    await QuizModel.deleteMany({});
+    await UserModel.deleteMany({});
 });
 
-// Globals variables
+// Global Variables
 let apiEndPoint: string;
 
-import { Quiz } from "../Quiz";
+import User from "./User";
 
 async function exec() {
     return await request(app).get(apiEndPoint);
 }
 
-describe("GET /api/getQuizzes", () => {
+describe("GET /api/getUsers", () => {
     it("should return status 404, and error property if result is empty", async () => {
-        apiEndPoint = "/api/getQuizzes";
+        apiEndPoint = "/api/getUsers";
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(404);
         expect(body).toHaveProperty("error");
     });
+
     it("should return status 200, and data property if result is not empty", async () => {
-        const doc = new QuizModel(new Quiz());
+        const user = new User();
+        const hash = await User.hash(user.password);
+        const doc = new UserModel(Object.assign(user, { hash }));
         await doc.save();
 
-        apiEndPoint = "/api/getQuizzes";
+        apiEndPoint = "/api/getUsers";
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(200);
         expect(body).toHaveProperty("data");
+        expect(body.data).not.toHaveProperty("hash");
     });
 });
 
-describe("GET /api/getQuiz/:id", () => {
-    it("should return status 400, and error property if req.param is not ObjectID", async () => {
-        apiEndPoint = "/api/getQuiz/1";
+describe("GET /api/getUser/:id", () => {
+    it("should return status 400. and error property if req.param is not ObjectID", async () => {
+        apiEndPoint = "/api/getUser/1";
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(400);
         expect(body).toHaveProperty("error");
     });
+
     it("should return status 404, and error property if req.param is not authenticated", async () => {
         const _id = new mongoose.Types.ObjectId().toString();
-        apiEndPoint = "/api/getQuiz/" + _id;
+        apiEndPoint = "/api/getUser/" + _id;
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(404);
         expect(body).toHaveProperty("error");
     });
+
     it("should return status 200, and data property if req.param is authenticated", async () => {
-        const doc = new QuizModel(new Quiz());
+        const user = new User();
+        const hash = await User.hash(user.password);
+        const doc = new UserModel(Object.assign(user, { hash }));
         await doc.save();
 
         const { _id } = doc;
-        apiEndPoint = "/api/getQuiz/" + _id;
+        apiEndPoint = "/api/getUser/" + _id;
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(200);
         expect(body).toHaveProperty("data");
+        expect(body.data).not.toHaveProperty("hash");
     });
 });

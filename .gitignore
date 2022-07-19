@@ -1,7 +1,7 @@
-app.js
-node_modules
-package-lock.json
+/src/app.js
+dist/
+node_modules/
 yarn.lock
-/config/*.json
+/src/config/*.json
 *.js
 .vscode

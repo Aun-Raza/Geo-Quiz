@@ -1,5 +1,5 @@
 import app from "../../../app";
-import { QuizModel } from "../../../model/quiz/model.quiz";
+import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
@@ -22,7 +22,7 @@ beforeEach(async () => {
 let apiEndPoint: string;
 let reqBody: any;
 
-import { Quiz } from "../Quiz";
+import { Quiz } from "./Quiz";
 
 async function exec() {
     return await request(app).post(apiEndPoint).send(reqBody);

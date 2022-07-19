@@ -1,0 +1,5 @@
+{
+    "PORT": 3000,
+    "DB_URI": "mongodb://localhost:27017",
+    "JWT_PRIVATE_KEY": "RM7r+XoyobVM4x934i5rlMk4T+wgdz72grDG1dhYvEw="
+}

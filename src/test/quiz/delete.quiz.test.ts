@@ -1,5 +1,5 @@
 import app from "../../../app";
-import { QuizModel } from "../../../model/quiz/model.quiz";
+import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
@@ -21,7 +21,7 @@ beforeEach(async () => {
 // Global Variables
 let apiEndPoint: string;
 
-import { Quiz } from "../Quiz";
+import { Quiz } from "./Quiz";
 
 async function exec() {
     return await request(app).delete(apiEndPoint);
