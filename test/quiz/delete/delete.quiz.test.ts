@@ -20,25 +20,8 @@ beforeEach(async () => {
 
 // Global Variables
 let apiEndPoint: string;
-let reqBody: any;
 
-// TODO: Replace this with a reusable class
-const quiz = {
-    title: "quiz1",
-    questions: [
-        {
-            name: "true and false question",
-            type: "True-False",
-            correctAnswer: true,
-        },
-        {
-            name: "multiple choice question",
-            type: "Multiple-Choice",
-            answers: ["a", "b", "c", "d"],
-            correctAnswer: "a",
-        },
-    ],
-};
+import { Quiz } from "../Quiz";
 
 async function exec() {
     return await request(app).delete(apiEndPoint);
@@ -63,7 +46,7 @@ describe("DELETE /api/deleteQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 200, data property, and data to be deleted if req.param is valid", async () => {
-        const doc = new QuizModel(quiz);
+        const doc = new QuizModel(new Quiz());
         await doc.save();
 
         const { _id } = doc;

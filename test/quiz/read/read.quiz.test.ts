@@ -21,23 +21,7 @@ beforeEach(async () => {
 // Globals variables
 let apiEndPoint: string;
 
-// TODO: Replace this with a reusable class
-const quiz = {
-    title: "quiz1",
-    questions: [
-        {
-            name: "true and false question",
-            type: "True-False",
-            correctAnswer: true,
-        },
-        {
-            name: "multiple choice question",
-            type: "Multiple-Choice",
-            answers: ["a", "b", "c", "d"],
-            correctAnswer: "a",
-        },
-    ],
-};
+import { Quiz } from "../Quiz";
 
 async function exec() {
     return await request(app).get(apiEndPoint);
@@ -52,7 +36,7 @@ describe("GET /api/getQuizzes", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 200, and data property if result is not empty", async () => {
-        const doc = new QuizModel(quiz);
+        const doc = new QuizModel(new Quiz());
         await doc.save();
 
         apiEndPoint = "/api/getQuizzes";
@@ -80,7 +64,7 @@ describe("GET /api/getQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 200, and data property if req.param is authenticated", async () => {
-        const doc = new QuizModel(quiz);
+        const doc = new QuizModel(new Quiz());
         await doc.save();
 
         const { _id } = doc;

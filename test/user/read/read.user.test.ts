@@ -21,11 +21,7 @@ beforeEach(async () => {
 // Global Variables
 let apiEndPoint: string;
 
-const user = {
-    email: "johnDoe@gmail.com",
-    username: "John Doe",
-    hash: "password", // In code, we converted password to hash in schema
-};
+import User from "../User";
 
 async function exec() {
     return await request(app).get(apiEndPoint);
@@ -42,7 +38,9 @@ describe("GET /api/getUsers", () => {
     });
 
     it("should return status 200, and data property if result is not empty", async () => {
-        const doc = new UserModel(user);
+        const user = new User();
+        const hash = await User.hash(user.password);
+        const doc = new UserModel(Object.assign(user, { hash }));
         await doc.save();
 
         apiEndPoint = "/api/getUsers";
@@ -76,7 +74,9 @@ describe("GET /api/getUser/:id", () => {
     });
 
     it("should return status 200, and data property if req.param is authenticated", async () => {
-        const doc = new UserModel(user);
+        const user = new User();
+        const hash = await User.hash(user.password);
+        const doc = new UserModel(Object.assign(user, { hash }));
         await doc.save();
 
         const { _id } = doc;

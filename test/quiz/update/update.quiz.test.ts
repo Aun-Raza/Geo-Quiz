@@ -22,22 +22,7 @@ beforeEach(async () => {
 let apiEndPoint: string;
 let reqBody: any;
 
-// TODO: Replace this with a reusable class
-const true_false = {
-    name: "true and false question",
-    type: "True-False",
-    correctAnswer: true,
-};
-const multiple_choice = {
-    name: "multiple choice question",
-    type: "Multiple-Choice",
-    answers: ["a", "b", "c", "d"],
-    correctAnswer: "a",
-};
-const quiz = {
-    title: "quiz1",
-    questions: [true_false, multiple_choice],
-};
+import { Quiz } from "../Quiz";
 
 async function exec() {
     return await request(app).put(apiEndPoint).send(reqBody);
@@ -46,7 +31,7 @@ async function exec() {
 describe("PUT /api/updateQuiz/:id", () => {
     it("should return status 400, and error property if req.param is not a ObjectID", async () => {
         apiEndPoint = "/api/updateQuiz/1";
-        reqBody = { ...quiz };
+        reqBody = new Quiz();
 
         const { body, statusCode } = await exec();
 
@@ -56,7 +41,7 @@ describe("PUT /api/updateQuiz/:id", () => {
     it("should return status 404, and error property if req.param is not authenticated", async () => {
         const _id = new mongoose.Types.ObjectId().toString();
         apiEndPoint = "/api/updateQuiz/" + _id;
-        reqBody = { ...quiz };
+        reqBody = new Quiz();
 
         const { body, statusCode } = await exec();
 
@@ -64,7 +49,7 @@ describe("PUT /api/updateQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 400, and error property if req.body is invalid", async () => {
-        const doc = new QuizModel(quiz);
+        const doc = new QuizModel(new Quiz());
         await doc.save();
 
         const { _id } = doc;
@@ -77,12 +62,12 @@ describe("PUT /api/updateQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 201, and data property, and be saved if req.body is valid", async () => {
-        const doc = new QuizModel(quiz);
+        const doc = new QuizModel(new Quiz());
         await doc.save();
 
         const { _id } = doc;
         apiEndPoint = "/api/updateQuiz/" + _id;
-        reqBody = { ...quiz };
+        reqBody = new Quiz();
         reqBody.title = "quiz 1 updated";
 
         const { body, statusCode } = await exec();
