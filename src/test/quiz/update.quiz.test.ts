@@ -3,6 +3,7 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
+import { getSignedToken } from "../../model/user/model.user";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -20,15 +21,36 @@ beforeEach(async () => {
 
 // Global Variables
 let apiEndPoint: string;
+let token: string;
 let reqBody: any;
 
 import { Quiz } from "./Quiz";
 
 async function exec() {
-    return await request(app).put(apiEndPoint).send(reqBody);
+    return await request(app)
+        .put(apiEndPoint)
+        .set("x-auth-token", token)
+        .send(reqBody);
 }
 
 describe("PUT /api/updateQuiz/:id", () => {
+    beforeEach(() => {
+        token = getSignedToken("john doe");
+    });
+    it("should return status 401 if auth-token is not provided", async () => {
+        const doc = new QuizModel(new Quiz());
+        await doc.save();
+
+        const { _id } = doc;
+        apiEndPoint = "/api/updateQuiz/" + _id;
+        reqBody = new Quiz();
+        token = null;
+
+        const { body, statusCode } = await exec();
+
+        expect(statusCode).toBe(401);
+        expect(body).toHaveProperty("error");
+    });
     it("should return status 400, and error property if req.param is not a ObjectID", async () => {
         apiEndPoint = "/api/updateQuiz/1";
         reqBody = new Quiz();

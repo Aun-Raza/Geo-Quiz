@@ -3,6 +3,7 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
+import { getSignedToken } from "../../model/user/model.user";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -20,18 +21,37 @@ beforeEach(async () => {
 
 // Global Variables
 let apiEndPoint: string;
+let token: string;
 let reqBody: any;
 
 import { Quiz } from "./Quiz";
 
 async function exec() {
-    return await request(app).post(apiEndPoint).send(reqBody);
+    return await request(app)
+        .post(apiEndPoint)
+        .set("x-auth-token", token)
+        .send(reqBody);
 }
 
 describe("POST /api/createQuiz - BOTH", () => {
+    beforeEach(() => {
+        token = getSignedToken("john doe");
+    });
+
+    it("should return status 401 if auth-token is not provided", async () => {
+        apiEndPoint = "/api/createQuiz";
+        reqBody = null;
+        token = null;
+
+        const { body, statusCode } = await exec();
+
+        expect(statusCode).toBe(401);
+        expect(body).toHaveProperty("error");
+    });
     it("should return status 400, and error property if req.body is invalid", async () => {
         apiEndPoint = "/api/createQuiz";
         reqBody = null;
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(400);
@@ -113,7 +133,6 @@ describe("POST /api/createQuiz - Multiple Choice", () => {
     it("should return status 201, data property, and be saved if req.body is valid", async () => {
         apiEndPoint = "/api/createQuiz";
         reqBody = new Quiz([Quiz.multipleChoice]);
-        console.log("Failed Test = ", reqBody);
 
         const { body, statusCode } = await exec();
         const { data } = body;

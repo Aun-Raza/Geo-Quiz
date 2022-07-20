@@ -3,6 +3,7 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
+import { getSignedToken } from "../../model/user/model.user";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -20,14 +21,31 @@ beforeEach(async () => {
 
 // Global Variables
 let apiEndPoint: string;
+let token: string;
 
 import { Quiz } from "./Quiz";
 
 async function exec() {
-    return await request(app).delete(apiEndPoint);
+    return await request(app).delete(apiEndPoint).set("x-auth-token", token);
 }
 
 describe("DELETE /api/deleteQuiz/:id", () => {
+    beforeEach(() => {
+        token = getSignedToken("john doe");
+    });
+    it("should return status 401 if auth-token is not provided", async () => {
+        const doc = new QuizModel(new Quiz());
+        await doc.save();
+
+        const { _id } = doc;
+        apiEndPoint = "/api/deleteQuiz/" + _id;
+        token = null;
+
+        const { body, statusCode } = await exec();
+
+        expect(statusCode).toBe(401);
+        expect(body).toHaveProperty("error");
+    });
     it("should return status 400, and error property if req.param is not ObjectID", async () => {
         apiEndPoint = "/api/deleteQuiz/1";
 
