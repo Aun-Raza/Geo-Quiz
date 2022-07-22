@@ -1,13 +1,13 @@
 import bcrypt from "bcrypt";
 
-export default class User {
+class User {
     public static async hash(password: string): Promise<string> {
         return await bcrypt.hash(password, await bcrypt.genSalt());
     }
 
     constructor(
         public email: string = "johnDoe@gmail.com",
-        public username: string = "John Doe",
+        public username: string = "john doe",
         public password: string = "password"
     ) {}
 
@@ -19,3 +19,5 @@ export default class User {
         };
     }
 }
+
+export { User };

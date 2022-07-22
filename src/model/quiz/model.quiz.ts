@@ -1,26 +1,27 @@
 // @ts-nocheck
-import { Schema, model } from 'mongoose';
+import { Schema, model, ObjectId } from "mongoose";
 import {
-	AbstractQuestionSchema,
-	TrueAndFalseSchema,
-	MultipleChoiceSchema,
-} from './sub-schemas';
+    AbstractQuestionSchema,
+    TrueAndFalseSchema,
+    MultipleChoiceSchema,
+} from "./sub-schemas";
 
-interface Quiz {
-	title: string;
-	questions: [typeof AbstractQuestionSchema];
+interface IQuiz {
+    _id: ObjectId;
+    title: string;
+    questions: [typeof AbstractQuestionSchema];
 }
 
-const QuizSchema = new Schema<Quiz>(
-	{
-		title: { type: String, minlength: 5, maxlength: 25, required: true },
-		questions: {
-			type: [AbstractQuestionSchema],
-			default: undefined,
-			required: true,
-		},
-	},
-	{ timestamps: true }
+const QuizSchema = new Schema<IQuiz>(
+    {
+        title: { type: String, minlength: 5, maxlength: 25, required: true },
+        questions: {
+            type: [AbstractQuestionSchema],
+            default: undefined,
+            required: true,
+        },
+    },
+    { timestamps: true }
 );
 
 /* 
@@ -28,11 +29,11 @@ const QuizSchema = new Schema<Quiz>(
 	supporting multiple data types for the QuizSchema.questions field. 
 */
 
-QuizSchema.path('questions').discriminator('True-False', TrueAndFalseSchema);
-QuizSchema.path('questions').discriminator(
-	'Multiple-Choice',
-	MultipleChoiceSchema
+QuizSchema.path("questions").discriminator("True-False", TrueAndFalseSchema);
+QuizSchema.path("questions").discriminator(
+    "Multiple-Choice",
+    MultipleChoiceSchema
 );
 
-const QuizModel = model('Quiz', QuizSchema);
+const QuizModel = model<IQuiz>("Quiz", QuizSchema);
 export { QuizModel };

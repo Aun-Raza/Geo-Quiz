@@ -3,7 +3,8 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
-import { getSignedToken } from "../../model/user/model.user";
+import { getSignedToken } from "./getSignedToken";
+import { Quiz } from "./Quiz";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -19,28 +20,25 @@ beforeEach(async () => {
     await QuizModel.deleteMany({});
 });
 
-// Global Variables
-let apiEndPoint: string;
-let token: string;
-let reqBody: any;
-
-import { Quiz } from "./Quiz";
-
 async function exec() {
     return await request(app)
         .post(apiEndPoint)
         .set("x-auth-token", token)
         .send(reqBody);
 }
+// Global Variable(s)
+let apiEndPoint: string;
+let token: string;
+let reqBody: any;
 
 describe("POST /api/createQuiz - BOTH", () => {
     beforeEach(() => {
-        token = getSignedToken("john doe");
+        apiEndPoint = "/api/createQuiz";
+        reqBody = new Quiz(); // constructor creates two questions (multiple choice and true & false) by default if not value initialized
+        token = getSignedToken();
     });
 
     it("should return status 401 if auth-token is not provided", async () => {
-        apiEndPoint = "/api/createQuiz";
-        reqBody = null;
         token = null;
 
         const { body, statusCode } = await exec();
@@ -49,7 +47,6 @@ describe("POST /api/createQuiz - BOTH", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 400, and error property if req.body is invalid", async () => {
-        apiEndPoint = "/api/createQuiz";
         reqBody = null;
 
         const { body, statusCode } = await exec();
@@ -58,9 +55,6 @@ describe("POST /api/createQuiz - BOTH", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 201, data property, and be saved if req.body is valid", async () => {
-        apiEndPoint = "/api/createQuiz";
-        reqBody = new Quiz();
-
         const { body, statusCode } = await exec();
         const { data } = body;
 
@@ -82,10 +76,12 @@ describe("POST /api/createQuiz - BOTH", () => {
 });
 
 describe("POST /api/createQuiz - True & False", () => {
-    it("should return status 201, data property, and be saved if req.body is valid", async () => {
+    beforeEach(() => {
         apiEndPoint = "/api/createQuiz";
         reqBody = new Quiz([Quiz.trueFalse]);
-
+        token = getSignedToken();
+    });
+    it("should return status 201, data property, and be saved if req.body is valid", async () => {
         const { body, statusCode } = await exec();
         const { data } = body;
 
@@ -106,9 +102,12 @@ describe("POST /api/createQuiz - True & False", () => {
 });
 
 describe("POST /api/createQuiz - Multiple Choice", () => {
-    it("should return status 400, and error property if correctAnswer is invalid", async () => {
+    beforeEach(() => {
         apiEndPoint = "/api/createQuiz";
-
+        reqBody = new Quiz([Quiz.multipleChoice]);
+        token = getSignedToken();
+    });
+    it("should return status 400, and error property if correctAnswer is invalid", async () => {
         let updatedMC = { ...Quiz.multipleChoice };
         updatedMC.correctAnswer = "e";
         reqBody = new Quiz([updatedMC]);
@@ -119,8 +118,6 @@ describe("POST /api/createQuiz - Multiple Choice", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 400, and error property if answers are duplicated", async () => {
-        apiEndPoint = "/api/createQuiz";
-
         let updatedMC = { ...Quiz.multipleChoice };
         updatedMC.answers = ["a", "b", "c", "c", "d"];
         reqBody = new Quiz([updatedMC]);
@@ -131,9 +128,6 @@ describe("POST /api/createQuiz - Multiple Choice", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 201, data property, and be saved if req.body is valid", async () => {
-        apiEndPoint = "/api/createQuiz";
-        reqBody = new Quiz([Quiz.multipleChoice]);
-
         const { body, statusCode } = await exec();
         const { data } = body;
 

@@ -3,6 +3,7 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
+import { Quiz } from "./Quiz";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -18,18 +19,17 @@ beforeEach(async () => {
     await QuizModel.deleteMany({});
 });
 
-// Globals variables
-let apiEndPoint: string;
-
-import { Quiz } from "./Quiz";
-
 async function exec() {
     return await request(app).get(apiEndPoint);
 }
+// Globals variable(s)
+let apiEndPoint: string;
 
 describe("GET /api/getQuizzes", () => {
-    it("should return status 404, and error property if result is empty", async () => {
+    beforeEach(() => {
         apiEndPoint = "/api/getQuizzes";
+    });
+    it("should return status 404, and error property if result is empty", async () => {
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(404);
@@ -39,7 +39,6 @@ describe("GET /api/getQuizzes", () => {
         const doc = new QuizModel(new Quiz());
         await doc.save();
 
-        apiEndPoint = "/api/getQuizzes";
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(200);
@@ -48,8 +47,12 @@ describe("GET /api/getQuizzes", () => {
 });
 
 describe("GET /api/getQuiz/:id", () => {
+    beforeEach(() => {
+        apiEndPoint = "/api/getQuiz/";
+    });
     it("should return status 400, and error property if req.param is not ObjectID", async () => {
-        apiEndPoint = "/api/getQuiz/1";
+        apiEndPoint += 1;
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(400);
@@ -57,7 +60,8 @@ describe("GET /api/getQuiz/:id", () => {
     });
     it("should return status 404, and error property if req.param is not authenticated", async () => {
         const _id = new mongoose.Types.ObjectId().toString();
-        apiEndPoint = "/api/getQuiz/" + _id;
+        apiEndPoint += _id;
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(404);
@@ -67,8 +71,8 @@ describe("GET /api/getQuiz/:id", () => {
         const doc = new QuizModel(new Quiz());
         await doc.save();
 
-        const { _id } = doc;
-        apiEndPoint = "/api/getQuiz/" + _id;
+        apiEndPoint += doc._id;
+
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(200);

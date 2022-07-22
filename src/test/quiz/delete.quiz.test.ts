@@ -1,9 +1,10 @@
 import app from "../../../app";
 import { QuizModel } from "../../model/quiz/model.quiz";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import config from "config";
 import request from "supertest";
-import { getSignedToken } from "../../model/user/model.user";
+import { getSignedToken } from "./getSignedToken";
+import { Quiz } from "./Quiz";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -19,26 +20,33 @@ beforeEach(async () => {
     await QuizModel.deleteMany({});
 });
 
-// Global Variables
-let apiEndPoint: string;
-let token: string;
-
-import { Quiz } from "./Quiz";
-
 async function exec() {
     return await request(app).delete(apiEndPoint).set("x-auth-token", token);
 }
 
+interface IQuiz extends mongoose.Document {
+    _id: ObjectId;
+}
+
+// Global Variable(s)
+let apiEndPoint: string;
+let saveQuiz: () => Promise<IQuiz>;
+let token: string;
+
 describe("DELETE /api/deleteQuiz/:id", () => {
     beforeEach(() => {
-        token = getSignedToken("john doe");
+        apiEndPoint = "/api/deleteQuiz/";
+        saveQuiz = async () => {
+            const doc = new QuizModel(new Quiz());
+            await doc.save();
+            return doc;
+        };
+        token = getSignedToken();
     });
     it("should return status 401 if auth-token is not provided", async () => {
-        const doc = new QuizModel(new Quiz());
-        await doc.save();
+        const doc = await saveQuiz();
 
-        const { _id } = doc;
-        apiEndPoint = "/api/deleteQuiz/" + _id;
+        apiEndPoint += doc._id;
         token = null;
 
         const { body, statusCode } = await exec();
@@ -47,7 +55,7 @@ describe("DELETE /api/deleteQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 400, and error property if req.param is not ObjectID", async () => {
-        apiEndPoint = "/api/deleteQuiz/1";
+        apiEndPoint += 1;
 
         const { body, statusCode } = await exec();
 
@@ -56,7 +64,7 @@ describe("DELETE /api/deleteQuiz/:id", () => {
     });
     it("should return status 404, and error property if req.param is not authenticated", async () => {
         const _id = new mongoose.Types.ObjectId().toString();
-        apiEndPoint = "/api/deleteQuiz/" + _id;
+        apiEndPoint += _id;
 
         const { body, statusCode } = await exec();
 
@@ -64,18 +72,16 @@ describe("DELETE /api/deleteQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 200, data property, and data to be deleted if req.param is valid", async () => {
-        const doc = new QuizModel(new Quiz());
-        await doc.save();
+        const doc = await saveQuiz();
 
-        const { _id } = doc;
-        apiEndPoint = "/api/deleteQuiz/" + _id;
+        apiEndPoint += doc._id;
 
         const { body, statusCode } = await exec();
 
         expect(statusCode).toBe(200);
         expect(body).toHaveProperty("data");
 
-        const res = await QuizModel.findById(_id);
+        const res = await QuizModel.findById(doc._id);
         expect(res).toBeNull();
     });
 });

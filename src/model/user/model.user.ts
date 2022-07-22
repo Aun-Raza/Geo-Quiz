@@ -1,14 +1,13 @@
-import { Schema, model } from "mongoose";
-import jwt from "jsonwebtoken";
-import config from "config";
+import { Schema, model, ObjectId } from "mongoose";
 
-interface User {
+interface IUser {
+    _id: ObjectId;
     email: string;
     username: string;
     hash: string;
 }
 
-const UserSchema = new Schema<User>(
+const UserSchema = new Schema<IUser>(
     {
         email: {
             type: String,
@@ -28,12 +27,5 @@ const UserSchema = new Schema<User>(
     { timestamps: true }
 );
 
-// TODO: configure getSignedToken function as a method to UserModel TS
-function getSignedToken(username: string) {
-    return jwt.sign({ username }, config.get("JWT_PRIVATE_KEY"), {
-        expiresIn: 1800,
-    });
-}
-
-const UserModel = model("User", UserSchema);
-export { UserModel, getSignedToken };
+const UserModel = model<IUser>("User", UserSchema);
+export { UserModel };
