@@ -36,8 +36,7 @@ describe("GET /api/getQuizzes", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 200, and data property if result is not empty", async () => {
-        const doc = new QuizModel(new Quiz());
-        await doc.save();
+        await Quiz.saveQuiz();
 
         const { body, statusCode } = await exec();
 
@@ -68,10 +67,9 @@ describe("GET /api/getQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 200, and data property if req.param is authenticated", async () => {
-        const doc = new QuizModel(new Quiz());
-        await doc.save();
+        const savedQuiz = await Quiz.saveQuiz();
 
-        apiEndPoint += doc._id;
+        apiEndPoint += savedQuiz._id;
 
         const { body, statusCode } = await exec();
 

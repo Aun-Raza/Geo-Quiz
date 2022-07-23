@@ -15,6 +15,7 @@ export function auth(req: CustomRequest, res: Response, next: NextFunction) {
     try {
         const decoded = jwt.verify(token, config.get("JWT_PRIVATE_KEY"));
         req.user = decoded;
+        console.log("req.user", req.user);
         next();
     } catch (error) {
         res.status(401);

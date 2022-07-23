@@ -1,3 +1,6 @@
+import { ObjectId } from "mongoose";
+import { QuizModel } from "../../model/quiz/model.quiz";
+
 type typeTrueFalse = {
     name: string;
     type: string;
@@ -23,10 +26,20 @@ const MultipleChoice: typeMultipleChoice = {
     correctAnswer: "a",
 };
 
-export class Quiz {
+interface IQuiz {
+    _id: ObjectId;
+}
+
+class Quiz {
     public title: string = "quiz1";
     public static trueFalse = TrueFalse;
     public static multipleChoice = MultipleChoice;
+
+    public static async saveQuiz() {
+        const doc = new QuizModel(new Quiz());
+        await doc.save();
+        return doc;
+    }
 
     constructor(
         public questions: (typeTrueFalse | typeMultipleChoice)[] = [
@@ -42,3 +55,5 @@ export class Quiz {
         };
     }
 }
+
+export { Quiz, IQuiz };

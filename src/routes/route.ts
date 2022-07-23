@@ -11,6 +11,8 @@ import {
     getUser,
     registerUser,
     loginUser,
+    updateUser,
+    deleteUser,
 } from "../controller/user/controller.user";
 import { isObjectID } from "../middleware/auth/objectID";
 import { auth } from "../middleware/auth/auth";
@@ -29,6 +31,8 @@ router.get("/api/getUsers", getUsers);
 router.get("/api/getUser/:id", isObjectID, getUser);
 router.post("/api/registerUser", registerUser);
 router.post("/api/loginUser", loginUser);
+router.put("/api/updateUser/:id", [isObjectID, auth], updateUser);
+router.delete("/api/deleteUser/:id", [isObjectID, auth], deleteUser);
 
 router.use(notFound);
 router.use(errorHandler);

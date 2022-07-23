@@ -3,7 +3,7 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose from "mongoose";
 import config from "config";
 import request from "supertest";
-import { getSignedToken } from "./getSignedToken";
+import { User } from "../user/User";
 import { Quiz } from "./Quiz";
 
 // Basic App & DB Setup
@@ -32,10 +32,10 @@ let token: string;
 let reqBody: any;
 
 describe("POST /api/createQuiz - BOTH", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         apiEndPoint = "/api/createQuiz";
-        reqBody = new Quiz(); // constructor creates two questions (multiple choice and true & false) by default if not value initialized
-        token = getSignedToken();
+        reqBody = new Quiz();
+        token = User.getSignedToken(await User.saveUser());
     });
 
     it("should return status 401 if auth-token is not provided", async () => {
@@ -76,10 +76,10 @@ describe("POST /api/createQuiz - BOTH", () => {
 });
 
 describe("POST /api/createQuiz - True & False", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         apiEndPoint = "/api/createQuiz";
         reqBody = new Quiz([Quiz.trueFalse]);
-        token = getSignedToken();
+        token = User.getSignedToken(await User.saveUser());
     });
     it("should return status 201, data property, and be saved if req.body is valid", async () => {
         const { body, statusCode } = await exec();
@@ -102,10 +102,10 @@ describe("POST /api/createQuiz - True & False", () => {
 });
 
 describe("POST /api/createQuiz - Multiple Choice", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         apiEndPoint = "/api/createQuiz";
         reqBody = new Quiz([Quiz.multipleChoice]);
-        token = getSignedToken();
+        token = User.getSignedToken(await User.saveUser());
     });
     it("should return status 400, and error property if correctAnswer is invalid", async () => {
         let updatedMC = { ...Quiz.multipleChoice };

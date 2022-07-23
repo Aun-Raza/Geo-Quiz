@@ -6,7 +6,11 @@ import bcrypt from "bcrypt";
 import config from "config";
 import log from "../../log";
 import _ from "lodash";
-import { info } from "winston";
+import { ObjectId } from "mongoose";
+
+interface CustomRequest extends Request {
+    user: { _id: ObjectId; username: string };
+}
 
 /* GET METHOD(s)
  */
@@ -65,7 +69,7 @@ export async function registerUser(req: Request, res: Response) {
     doc = await doc.save();
 
     const token = jwt.sign(
-        { username: user.username },
+        { _id: user._id, username: user.username },
         config.get("JWT_PRIVATE_KEY"),
         { expiresIn: 1800 }
     );
@@ -78,7 +82,7 @@ export async function registerUser(req: Request, res: Response) {
 }
 
 export async function loginUser(req: Request, res: Response) {
-    log.info("POST /api/registerUser", { service: "registerUser" });
+    log.info("POST /api/loginUser", { service: "loginUser" });
 
     const { username: inputUsername, password: inputPassword } = req.body;
 
@@ -98,7 +102,7 @@ export async function loginUser(req: Request, res: Response) {
     }
 
     const token = jwt.sign(
-        { username: user.username },
+        { _id: user._id, username: user.username },
         config.get("JWT_PRIVATE_KEY"),
         { expiresIn: 1800 }
     );
@@ -106,4 +110,48 @@ export async function loginUser(req: Request, res: Response) {
     res.header("x-auth-token", token)
         .status(200)
         .json({ msg: "You logged in" });
+}
+
+export async function updateUser(req: CustomRequest, res: Response) {
+    log.info("UPDATE /api/updateUser/:id", { service: "updateUser" });
+
+    if (req.user._id.toString() != req.params.id) {
+        res.status(401);
+        throw new Error(`You are not authorized to update this user`);
+    }
+
+    const user = await validator
+        .validateAsync(req.body || null)
+        .catch((error) => {
+            res.status(400);
+            throw error;
+        });
+
+    const salt = await bcrypt.genSalt();
+    user.hash = await bcrypt.hash(user.password, salt);
+
+    const query = await UserModel.findByIdAndUpdate(req.params.id, user);
+    if (!query) {
+        res.status(404);
+        throw new Error(`Cannot find targeted user in the registry`);
+    }
+
+    res.status(201).json({ data: query });
+}
+
+export async function deleteUser(req: CustomRequest, res: Response) {
+    log.info("PUT /api/deleteUser/:id", { service: "deleteUser" });
+
+    if (req.user._id.toString() != req.params.id) {
+        res.status(401);
+        throw new Error(`You are not authorized to delete this user`);
+    }
+
+    const query = await UserModel.findByIdAndDelete(req.params.id);
+    if (!query) {
+        res.status(404);
+        throw new Error(`Cannot find targeted user in the registry`);
+    }
+
+    res.status(201).json({ data: query });
 }

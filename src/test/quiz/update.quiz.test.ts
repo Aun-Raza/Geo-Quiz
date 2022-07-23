@@ -3,9 +3,8 @@ import { QuizModel } from "../../model/quiz/model.quiz";
 import mongoose, { ObjectId } from "mongoose";
 import config from "config";
 import request from "supertest";
-import { getSignedToken } from "./getSignedToken";
-import { Quiz } from "./Quiz";
-import { ObjectBindingOrAssignmentElement } from "typescript";
+import { User } from "../user/User";
+import { Quiz, IQuiz } from "./Quiz";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -28,31 +27,21 @@ async function exec() {
         .send(reqBody);
 }
 
-interface IQuiz extends mongoose.Document {
-    _id: ObjectId;
-}
-
 // Global Variables
 let apiEndPoint: string;
 let reqBody: any;
-let saveQuiz: () => Promise<IQuiz>;
+let savedQuiz: IQuiz;
 let token: string;
 
 describe("PUT /api/updateQuiz/:id", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         apiEndPoint = "/api/updateQuiz/";
         reqBody = new Quiz();
-        token = getSignedToken();
-        saveQuiz = async () => {
-            const doc = new QuizModel(new Quiz());
-            await doc.save();
-            return doc;
-        };
+        savedQuiz = await Quiz.saveQuiz();
+        token = User.getSignedToken(await User.saveUser());
     });
     it("should return status 401 if auth-token is not provided", async () => {
-        const doc = await saveQuiz();
-
-        apiEndPoint += doc._id;
+        apiEndPoint += savedQuiz._id;
         token = null;
 
         const { body, statusCode } = await exec();
@@ -78,9 +67,7 @@ describe("PUT /api/updateQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 400, and error property if req.body is invalid", async () => {
-        const doc = await saveQuiz();
-
-        apiEndPoint += doc._id;
+        apiEndPoint += savedQuiz._id;
         reqBody = null;
 
         const { body, statusCode } = await exec();
@@ -89,9 +76,7 @@ describe("PUT /api/updateQuiz/:id", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 201, and data property, and be saved if req.body is valid", async () => {
-        const doc = await saveQuiz();
-
-        apiEndPoint += doc._id;
+        apiEndPoint += savedQuiz._id;
         reqBody.title = "quiz 1 updated";
 
         const { body, statusCode } = await exec();
@@ -103,7 +88,7 @@ describe("PUT /api/updateQuiz/:id", () => {
         );
         expect(data.title).toEqual(reqBody.title);
 
-        const { title } = await QuizModel.findById(doc._id);
+        const { title } = await QuizModel.findById(savedQuiz._id);
         expect(title).toEqual(reqBody.title);
     });
 });

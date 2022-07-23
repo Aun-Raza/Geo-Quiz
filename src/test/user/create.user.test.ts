@@ -1,5 +1,5 @@
 import app from "../../../app";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { UserModel } from "../../model/user/model.user";
 import config from "config";
 import request from "supertest";
@@ -23,26 +23,14 @@ async function exec() {
     return await request(app).post(apiEndPoint).send(reqBody);
 }
 
-interface IUser extends mongoose.Document {
-    username: string;
-}
-
 // Global Variables
 let apiEndPoint: string;
 let reqBody: any;
-let saveUser: () => Promise<IUser>;
 
 describe("POST /api/registerUser", () => {
     beforeEach(() => {
         apiEndPoint = "/api/registerUser";
         reqBody = new User();
-        saveUser = async () => {
-            const user = new User();
-            const hash = await User.hash(user.password);
-            const doc = new UserModel(Object.assign(user, { hash }));
-            await doc.save();
-            return doc;
-        };
     });
     it("should return status 400, and error property if req.body is invalid", async () => {
         reqBody = null;
@@ -53,14 +41,14 @@ describe("POST /api/registerUser", () => {
         expect(body).toHaveProperty("error");
     });
     it("should return status 400, error property, and not be saved if user is already registered", async () => {
-        let doc = await saveUser();
+        const { username } = await User.saveUser();
 
         const { statusCode, body } = await exec();
 
         expect(statusCode).toBe(400);
         expect(body).toHaveProperty("error");
 
-        const res = await UserModel.find({ username: doc.username });
+        const res = await UserModel.find({ username });
         expect(res).toHaveLength(1);
     });
     it("should return status 201, data property, auth-token, and be saved if req.body is valid", async () => {
@@ -81,20 +69,12 @@ describe("POST /api/registerUser", () => {
 });
 
 describe("POST /api/loginUser", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         apiEndPoint = "/api/loginUser";
         reqBody = { username: "john doe", password: "password" };
-        saveUser = async () => {
-            const user = new User();
-            const hash = await User.hash(user.password);
-            const doc = new UserModel(Object.assign(user, { hash }));
-            await doc.save();
-            return doc;
-        };
+        await User.saveUser();
     });
     it("should return status 400, and error property if username is incorrect", async () => {
-        await saveUser();
-
         delete reqBody.username;
 
         const { statusCode, body } = await exec();
@@ -104,8 +84,6 @@ describe("POST /api/loginUser", () => {
         expect(body.error).toEqual("Username is not correct");
     });
     it("should return status 400, and error property if password is incorrect", async () => {
-        await saveUser();
-
         delete reqBody.password;
 
         const { statusCode, body } = await exec();
@@ -115,8 +93,6 @@ describe("POST /api/loginUser", () => {
         expect(body.error).toEqual("Password is not correct");
     });
     it("should return status 200, auth-token, and msg property if username & password is correct", async () => {
-        await saveUser();
-
         const { statusCode, body, headers } = await exec();
 
         expect(statusCode).toBe(200);
