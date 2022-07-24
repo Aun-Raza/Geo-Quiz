@@ -21,6 +21,16 @@ if (NODE_ENV === "test") {
 
 const app = express();
 
+process.on("uncaughtException", (error) => {
+    log.error(error.message, { service: "uncaughtException" });
+    process.exit(1);
+});
+
+process.on("unhandledRejection", (error: Error) => {
+    log.error(error.message, { service: "unhandledRejection" });
+    process.exit(1);
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(router);

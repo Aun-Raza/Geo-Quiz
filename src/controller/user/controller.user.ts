@@ -77,7 +77,6 @@ export async function registerUser(req: Request, res: Response) {
         .status(201)
         .json({
             data: _.pick(doc, ["_id", "username", "email"]),
-            authToken: token,
         });
 }
 
@@ -136,7 +135,7 @@ export async function updateUser(req: CustomRequest, res: Response) {
         throw new Error(`Cannot find targeted user in the registry`);
     }
 
-    res.status(201).json({ data: query });
+    res.status(201).json({ data: _.pick(query, ["_id", "username", "email"]) });
 }
 
 export async function deleteUser(req: CustomRequest, res: Response) {
@@ -153,5 +152,5 @@ export async function deleteUser(req: CustomRequest, res: Response) {
         throw new Error(`Cannot find targeted user in the registry`);
     }
 
-    res.status(201).json({ data: query });
+    res.status(201).json({ data: _.pick(query, ["_id", "username", "email"]) });
 }
