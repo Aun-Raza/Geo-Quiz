@@ -1,15 +1,17 @@
 // @ts-nocheck
-import { Schema, model, ObjectId } from "mongoose";
+import mongoose, { Schema, model, ObjectId } from "mongoose";
 import {
     AbstractQuestionSchema,
     TrueAndFalseSchema,
     MultipleChoiceSchema,
 } from "./sub-schemas";
+import { isUser } from "./validators/custom-validator";
 
 interface IQuiz {
     _id: ObjectId;
     title: string;
     questions: [typeof AbstractQuestionSchema];
+    owner: mongoose.Types.ObjectId;
 }
 
 const QuizSchema = new Schema<IQuiz>(
@@ -18,6 +20,17 @@ const QuizSchema = new Schema<IQuiz>(
         questions: {
             type: [AbstractQuestionSchema],
             default: undefined,
+            required: true,
+        },
+        owner: {
+            type: mongoose.Types.ObjectId,
+            ref: "User",
+            validate: {
+                validator: function (v: ObjectId) {
+                    return isUser(v);
+                },
+                message: "Quiz must have a registered user",
+            },
             required: true,
         },
     },

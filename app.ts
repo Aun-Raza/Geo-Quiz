@@ -7,7 +7,7 @@ import config from "config";
 import log from "./src/log";
 
 let { NODE_ENV } = process.env;
-NODE_ENV = "development";
+NODE_ENV = "test";
 
 const console = new transports.Console();
 

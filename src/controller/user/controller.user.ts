@@ -7,6 +7,7 @@ import config from "config";
 import log from "../../log";
 import _ from "lodash";
 import { ObjectId } from "mongoose";
+import { QuizModel } from "../../model/quiz/model.quiz";
 
 interface CustomRequest extends Request {
     user: { _id: ObjectId; username: string };
@@ -24,7 +25,7 @@ export async function getUsers(req: Request, res: Response) {
     }
 
     const filteredQueries = queries.map((query) =>
-        _.pick(query, ["_id", "username", "email"])
+        _.pick(query, ["_id", "username", "email", "quizzes"])
     );
     res.json({ data: filteredQueries });
 }
@@ -38,7 +39,7 @@ export async function getUser(req: Request, res: Response) {
         throw new Error("no result is found");
     }
 
-    res.json({ data: _.pick(query, ["_id", "username", "email"]) });
+    res.json({ data: _.pick(query, ["_id", "username", "email", "quizzes"]) });
 }
 
 /* POST METHOD(s)
@@ -69,7 +70,7 @@ export async function registerUser(req: Request, res: Response) {
     doc = await doc.save();
 
     const token = jwt.sign(
-        { _id: user._id, username: user.username },
+        { _id: doc._id, username: doc.username },
         config.get("JWT_PRIVATE_KEY"),
         { expiresIn: 1800 }
     );
@@ -146,11 +147,17 @@ export async function deleteUser(req: CustomRequest, res: Response) {
         throw new Error(`You are not authorized to delete this user`);
     }
 
-    const query = await UserModel.findByIdAndDelete(req.params.id);
+    const query = await UserModel.findById(req.params.id);
     if (!query) {
         res.status(404);
         throw new Error(`Cannot find targeted user in the registry`);
     }
+
+    const { quizzes } = query;
+    quizzes.map(async (quiz) => {
+        await QuizModel.findByIdAndDelete(quiz);
+    });
+    await UserModel.deleteOne({ query });
 
     res.status(201).json({ data: _.pick(query, ["_id", "username", "email"]) });
 }

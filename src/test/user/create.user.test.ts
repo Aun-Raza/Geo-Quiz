@@ -1,8 +1,8 @@
 import app from "../../../app";
-import mongoose, { ObjectId } from "mongoose";
-import { UserModel } from "../../model/user/model.user";
 import config from "config";
+import mongoose from "mongoose";
 import request from "supertest";
+import { UserModel } from "../../model/user/model.user";
 import { User } from "./User";
 
 // Basic App & DB Setup
@@ -11,6 +11,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await UserModel.deleteMany({});
     await mongoose.connection.close();
     await app.close();
 });

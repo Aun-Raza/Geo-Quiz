@@ -1,10 +1,11 @@
 import app from "../../../app";
-import { QuizModel } from "../../model/quiz/model.quiz";
-import mongoose, { ObjectId } from "mongoose";
 import config from "config";
+import mongoose from "mongoose";
 import request from "supertest";
-import { User } from "../user/User";
+import { QuizModel } from "../../model/quiz/model.quiz";
 import { Quiz, IQuiz } from "./Quiz";
+import { User } from "../user/User";
+import { UserModel } from "../../model/user/model.user";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -12,12 +13,15 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await QuizModel.deleteMany();
+    await UserModel.deleteMany();
     await mongoose.connection.close();
     await app.close();
 });
 
 beforeEach(async () => {
-    await QuizModel.deleteMany({});
+    await QuizModel.deleteMany();
+    await UserModel.deleteMany();
 });
 
 async function exec() {

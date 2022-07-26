@@ -1,10 +1,11 @@
 import app from "../../../app";
-import { QuizModel } from "../../model/quiz/model.quiz";
-import mongoose from "mongoose";
 import config from "config";
+import mongoose from "mongoose";
 import request from "supertest";
-import { User } from "../user/User";
 import { Quiz, IQuiz } from "./Quiz";
+import { QuizModel } from "../../model/quiz/model.quiz";
+import { User } from "../user/User";
+import { UserModel } from "../../model/user/model.user";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -12,12 +13,15 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await QuizModel.deleteMany();
+    await UserModel.deleteMany();
     await mongoose.connection.close();
     await app.close();
 });
 
 beforeEach(async () => {
-    await QuizModel.deleteMany({});
+    await QuizModel.deleteMany();
+    await UserModel.deleteMany();
 });
 
 async function exec() {
@@ -63,6 +67,7 @@ describe("DELETE /api/deleteQuiz/:id", () => {
     });
     it("should return status 200, data property, and data to be deleted if req.param is valid", async () => {
         apiEndPoint += savedQuiz._id;
+        const { owner: ownerId } = savedQuiz;
 
         const { body, statusCode } = await exec();
 
@@ -71,5 +76,8 @@ describe("DELETE /api/deleteQuiz/:id", () => {
 
         const res = await QuizModel.findById(savedQuiz._id);
         expect(res).toBeNull();
+
+        const { quizzes } = await UserModel.findById(ownerId);
+        expect(quizzes.length).toBe(0);
     });
 });

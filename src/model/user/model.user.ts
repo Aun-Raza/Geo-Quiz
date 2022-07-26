@@ -1,10 +1,11 @@
-import { Schema, model, ObjectId } from "mongoose";
+import mongoose, { Schema, model, ObjectId } from "mongoose";
 
 interface IUser {
     _id: ObjectId;
     email: string;
     username: string;
     hash: string;
+    quizzes: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema<IUser>(
@@ -21,6 +22,11 @@ const UserSchema = new Schema<IUser>(
         },
         hash: {
             type: String,
+            required: true,
+        },
+        quizzes: {
+            type: [mongoose.Types.ObjectId],
+            ref: "Quiz",
             required: true,
         },
     },

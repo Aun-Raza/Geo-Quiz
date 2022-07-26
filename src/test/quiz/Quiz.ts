@@ -1,5 +1,6 @@
-import { ObjectId } from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { QuizModel } from "../../model/quiz/model.quiz";
+import { User } from "../user/User";
 
 type typeTrueFalse = {
     name: string;
@@ -28,6 +29,7 @@ const MultipleChoice: typeMultipleChoice = {
 
 interface IQuiz {
     _id: ObjectId;
+    owner: mongoose.Types.ObjectId;
 }
 
 class Quiz {
@@ -36,9 +38,13 @@ class Quiz {
     public static multipleChoice = MultipleChoice;
 
     public static async saveQuiz() {
-        const doc = new QuizModel(new Quiz());
-        await doc.save();
-        return doc;
+        const user = await User.saveUser();
+
+        const quiz = new QuizModel(
+            Object.assign(new Quiz(), { owner: user._id })
+        );
+        await quiz.save();
+        return quiz;
     }
 
     constructor(

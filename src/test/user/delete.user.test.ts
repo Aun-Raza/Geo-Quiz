@@ -1,9 +1,9 @@
 import app from "../../../app";
-import mongoose, { ObjectId } from "mongoose";
-import { UserModel } from "../../model/user/model.user";
 import config from "config";
+import mongoose from "mongoose";
 import request from "supertest";
-import { User } from "./User";
+import { UserModel } from "../../model/user/model.user";
+import { User, IUser } from "./User";
 
 // Basic App & DB Setup
 beforeAll(async () => {
@@ -11,6 +11,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+    await UserModel.deleteMany({});
     await mongoose.connection.close();
     await app.close();
 });
@@ -21,11 +22,6 @@ beforeEach(async () => {
 
 async function exec() {
     return await request(app).delete(apiEndPoint).set("x-auth-token", token);
-}
-
-interface IUser extends mongoose.Document {
-    _id: ObjectId;
-    username: string;
 }
 
 // Global Variables
