@@ -1,3 +1,4 @@
+import { auth } from "../middleware/auth";
 import express from "express";
 import {
     getQuizzes,
@@ -14,9 +15,9 @@ import {
     updateUser,
     deleteUser,
 } from "../controller/user/controller.user";
-import { isObjectID } from "../middleware/auth/objectID";
-import { auth } from "../middleware/auth/auth";
+import { isObjectID } from "../middleware/objectID";
 import { notFound, errorHandler } from "../middleware/error";
+
 const router = express.Router();
 
 // Quiz Section

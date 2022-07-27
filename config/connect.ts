@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import config from "config";
-import log from "../src/log";
+import log from "../src/log/logger";
 
 export default async function run() {
     try {

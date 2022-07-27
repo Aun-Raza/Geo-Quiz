@@ -4,7 +4,7 @@ import router from "./src/routes/route";
 import MongoDB from "./config/connect";
 import { transports } from "winston";
 import config from "config";
-import log from "./src/log";
+import log from "./src/log/logger";
 
 let { NODE_ENV } = process.env;
 NODE_ENV = "test";

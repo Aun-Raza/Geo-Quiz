@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
 import config from "config";
 import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 
 interface CustomRequest extends Request {
     user?: string | jwt.JwtPayload;

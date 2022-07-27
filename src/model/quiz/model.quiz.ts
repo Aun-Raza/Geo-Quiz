@@ -1,11 +1,11 @@
 // @ts-nocheck
-import mongoose, { Schema, model, ObjectId } from "mongoose";
 import {
     AbstractQuestionSchema,
     TrueAndFalseSchema,
     MultipleChoiceSchema,
-} from "./sub-schemas";
-import { isUser } from "./validators/custom-validator";
+} from "./schemas";
+import { isUser } from "./validators/custom-validator.quiz";
+import mongoose, { Schema, model, ObjectId } from "mongoose";
 
 interface IQuiz {
     _id: ObjectId;

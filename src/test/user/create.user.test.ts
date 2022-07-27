@@ -82,7 +82,6 @@ describe("POST /api/loginUser", () => {
 
         expect(statusCode).toBe(400);
         expect(body).toHaveProperty("error");
-        expect(body.error).toEqual("Username is not correct");
     });
     it("should return status 400, and error property if password is incorrect", async () => {
         delete reqBody.password;
@@ -91,7 +90,6 @@ describe("POST /api/loginUser", () => {
 
         expect(statusCode).toBe(400);
         expect(body).toHaveProperty("error");
-        expect(body.error).toEqual("Password is not correct");
     });
     it("should return status 200, auth-token, and msg property if username & password is correct", async () => {
         const { statusCode, body, headers } = await exec();
