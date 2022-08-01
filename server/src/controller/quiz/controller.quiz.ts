@@ -53,6 +53,7 @@ export async function getQuiz(req: Request, res: Response) {
  * POST METHOD(s)
  */
 
+// TODO: Transaction HERE
 export async function createQuiz(req: CustomRequest, res: Response) {
     log.info("POST /api/createQuiz", { service: "createQuiz" });
 
@@ -115,6 +116,7 @@ export async function updateQuiz(req: Request, res: Response) {
  * DELETE METHOD(s)
  */
 
+// TODO: Transaction HERE
 export async function deleteQuiz(req: CustomRequest, res: Response) {
     log.info("DELETE /api/deleteQuiz/:id", { service: "deleteQuiz" });
 

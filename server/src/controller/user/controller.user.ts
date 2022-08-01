@@ -152,6 +152,7 @@ export async function updateUser(req: CustomRequest, res: Response) {
         });
 }
 
+// TODO: Transaction HERE
 export async function deleteUser(req: CustomRequest, res: Response) {
     log.info("PUT /api/deleteUser/:id", { service: "deleteUser" });
 
