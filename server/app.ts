@@ -1,13 +1,14 @@
+import config from "config";
+import cors from "cors";
 import express from "express";
 import "express-async-errors";
-import router from "./src/routes/route";
-import MongoDB from "./config/connect";
-import { transports } from "winston";
-import config from "config";
 import log from "./src/log/logger";
+import MongoDB from "./config/connect";
+import router from "./src/routes/route";
+import { transports } from "winston";
 
 let { NODE_ENV } = process.env;
-NODE_ENV = "test";
+NODE_ENV = "development";
 
 const console = new transports.Console();
 
@@ -31,6 +32,7 @@ process.on("unhandledRejection", (error: Error) => {
     process.exit(1);
 });
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(router);

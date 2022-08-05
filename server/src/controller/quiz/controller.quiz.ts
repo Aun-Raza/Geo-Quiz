@@ -27,9 +27,11 @@ export async function getQuizzes(req: Request, res: Response) {
         throw new Error("no quizzes are found.");
     }
 
-    res.json({
-        data: _.pick(quizDocs, ["_id", "title", "questions", "owner"]),
+    const selectedQuizDocsProps = quizDocs.map((quizDoc) => {
+        return _.pick(quizDoc, ["_id", "title", "questions", "owner"]);
     });
+
+    res.json({ data: selectedQuizDocsProps });
 }
 
 export async function getQuiz(req: Request, res: Response) {
