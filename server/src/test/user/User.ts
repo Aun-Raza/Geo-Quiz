@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
-import config from "config";
-import jwt from "jsonwebtoken";
-import { ObjectId, Document } from "mongoose";
-import { UserModel } from "../../model/user/model.user";
+import bcrypt from 'bcrypt';
+import config from 'config';
+import jwt from 'jsonwebtoken';
+import { ObjectId, Document } from 'mongoose';
+import { UserModel } from '../../model/user/model.user';
 
 interface IUser extends Document {
     _id: ObjectId;
@@ -13,7 +13,7 @@ class User {
     public static getSignedToken(doc: IUser) {
         const { _id, username } = doc;
         const payload = { _id, username };
-        return jwt.sign(payload, config.get("JWT_PRIVATE_KEY"));
+        return jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
     }
 
     public static async hash(password: string): Promise<string> {
@@ -29,9 +29,9 @@ class User {
     }
 
     constructor(
-        public email: string = "johnDoe@gmail.com",
-        public username: string = "john doe",
-        public password: string = "password"
+        public email: string = 'johnDoe@gmail.com',
+        public username: string = 'john doe',
+        public password: string = 'password'
     ) {}
 
     public toString() {

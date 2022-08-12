@@ -1,6 +1,6 @@
-import mongoose, { ObjectId } from "mongoose";
-import { QuizModel } from "../../model/quiz/model.quiz";
-import { User } from "../user/User";
+import mongoose, { ObjectId } from 'mongoose';
+import { QuizModel } from '../../model/quiz/model.quiz';
+import { User } from '../user/User';
 
 type typeTrueFalse = {
     name: string;
@@ -16,15 +16,15 @@ type typeMultipleChoice = {
 };
 
 const TrueFalse: typeTrueFalse = {
-    name: "true and false question",
-    type: "True-False",
+    name: 'true and false question',
+    type: 'True-False',
     correctAnswer: true,
 };
 const MultipleChoice: typeMultipleChoice = {
-    name: "multiple choice question",
-    type: "Multiple-Choice",
-    answers: ["a", "b", "c", "d"],
-    correctAnswer: "a",
+    name: 'multiple choice question',
+    type: 'Multiple-Choice',
+    answers: ['a', 'b', 'c', 'd'],
+    correctAnswer: 'a',
 };
 
 interface IQuiz {
@@ -33,7 +33,7 @@ interface IQuiz {
 }
 
 class Quiz {
-    public title: string = "quiz1";
+    public title = 'quiz1';
     public static trueFalse = TrueFalse;
     public static multipleChoice = MultipleChoice;
 

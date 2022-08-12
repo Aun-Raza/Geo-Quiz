@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 const mCValidator = Joi.object({
     name: Joi.string().min(5).max(25).required(),

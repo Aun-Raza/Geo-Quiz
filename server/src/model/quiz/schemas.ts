@@ -1,5 +1,5 @@
-import { isDuplicated, isIncluded } from "./validators/schema-validator.quiz";
-import { Schema } from "mongoose";
+import { isDuplicated, isIncluded } from './validators/schema-validator.quiz';
+import { Schema } from 'mongoose';
 
 interface AbstractQuestion {
     name: string;
@@ -25,11 +25,11 @@ const AbstractQuestionSchema = new Schema<AbstractQuestion>(
         name: { type: String, minlength: 5, maxlength: 25, required: true },
         type: {
             type: String,
-            enum: ["True-False", "Multiple-Choice"],
+            enum: ['True-False', 'Multiple-Choice'],
             required: true,
         },
     },
-    { discriminatorKey: "type" }
+    { discriminatorKey: 'type' }
 );
 
 const TrueAndFalseSchema = new Schema<TrueAndFalse>({
@@ -43,7 +43,7 @@ const MultipleChoiceSchema = new Schema<MultipleChoice>({
         validate: {
             validator: (value: string[]) => !isDuplicated(value),
             message: (answer: { value: string[] }) =>
-                `${answer.value.join(" ")} cannot be duplicated`,
+                `${answer.value.join(' ')} cannot be duplicated`,
         },
         required: true,
     },

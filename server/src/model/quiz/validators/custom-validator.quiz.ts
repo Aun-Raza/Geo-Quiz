@@ -1,6 +1,6 @@
-import { isIncluded } from "./schema-validator.quiz";
-import { ObjectId } from "mongoose";
-import { UserModel } from "../../user/model.user";
+import { isIncluded } from './schema-validator.quiz';
+import { ObjectId } from 'mongoose';
+import { UserModel } from '../../user/model.user';
 
 export function isMCValid(
     array: { answers: string[]; correctAnswer: string }[]

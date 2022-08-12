@@ -1,17 +1,13 @@
-import axios from "axios";
-import { Quiz } from "../interfaces/Quiz";
-
-interface Response {
-    data: Quiz[];
-}
+import axios from 'axios';
+import { Quiz } from '../interfaces/Quiz';
 
 class QuizService {
     http = axios.create({
-        baseURL: "http://localhost:8000",
+        baseURL: 'http://localhost:8000',
     });
 
     async getQuizzes() {
-        const response = await this.http.get<Response>("/api/getQuizzes");
+        const response = await this.http.get<Quiz[]>('/api/getQuizzes');
         return response;
     }
 }
