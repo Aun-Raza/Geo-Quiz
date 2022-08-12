@@ -11,7 +11,7 @@ interface TableProps {
 
 function Table({ data }: TableProps) {
     return (
-        <table className="table table-striped table-hover my-3">
+        <table className="table table-hover my-3">
             <TableHeader columns={data.columns} />
             <TableBody data={data.rows} />
         </table>

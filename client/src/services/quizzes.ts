@@ -11,10 +11,8 @@ class QuizService {
     });
 
     async getQuizzes() {
-        const { data: quizzes } = await this.http.get<Response>(
-            "/api/getQuizzes"
-        );
-        return quizzes.data;
+        const response = await this.http.get<Response>("/api/getQuizzes");
+        return response;
     }
 }
 

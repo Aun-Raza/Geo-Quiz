@@ -108,6 +108,7 @@ export async function loginUser(req: Request, res: Response) {
     );
 
     res.header("x-auth-token", token)
+        .header("access-control-expose-headers", "x-auth-token")
         .status(200)
         .json({ msg: "You successfully logged in." });
 }
