@@ -9,28 +9,28 @@ interface IUser {
 }
 
 const UserSchema = new Schema<IUser>(
-    {
-        email: {
-            type: String,
-            minlength: 5,
-            required: true,
-        },
-        username: {
-            type: String,
-            minlength: 5,
-            required: true,
-        },
-        hash: {
-            type: String,
-            required: true,
-        },
-        quizzes: {
-            type: [mongoose.Types.ObjectId],
-            ref: 'Quiz',
-            required: true,
-        },
+  {
+    email: {
+      type: String,
+      minlength: 5,
+      required: true,
     },
-    { timestamps: true }
+    username: {
+      type: String,
+      minlength: 5,
+      required: true,
+    },
+    hash: {
+      type: String,
+      required: true,
+    },
+    quizzes: {
+      type: [mongoose.Types.ObjectId],
+      ref: 'Quiz',
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
 const UserModel = model<IUser>('User', UserSchema);

@@ -21,43 +21,43 @@ interface MultipleChoice {
 */
 
 const AbstractQuestionSchema = new Schema<AbstractQuestion>(
-    {
-        name: { type: String, minlength: 5, maxlength: 25, required: true },
-        type: {
-            type: String,
-            enum: ['True-False', 'Multiple-Choice'],
-            required: true,
-        },
+  {
+    name: { type: String, minlength: 5, maxlength: 25, required: true },
+    type: {
+      type: String,
+      enum: ['True-False', 'Multiple-Choice'],
+      required: true,
     },
-    { discriminatorKey: 'type' }
+  },
+  { discriminatorKey: 'type' }
 );
 
 const TrueAndFalseSchema = new Schema<TrueAndFalse>({
-    correctAnswer: { type: Boolean, required: true },
+  correctAnswer: { type: Boolean, required: true },
 });
 
 const MultipleChoiceSchema = new Schema<MultipleChoice>({
-    answers: {
-        type: [String],
-        default: undefined,
-        validate: {
-            validator: (value: string[]) => !isDuplicated(value),
-            message: (answer: { value: string[] }) =>
-                `${answer.value.join(' ')} cannot be duplicated`,
-        },
-        required: true,
+  answers: {
+    type: [String],
+    default: undefined,
+    validate: {
+      validator: (value: string[]) => !isDuplicated(value),
+      message: (answer: { value: string[] }) =>
+        `${answer.value.join(' ')} cannot be duplicated`,
     },
-    correctAnswer: {
-        type: String,
-        validate: {
-            validator: function (value: string) {
-                return isIncluded(value, this.answers);
-            },
-            message: (answer: { value: string }) =>
-                `${answer.value} is not a valid answer`,
-        },
-        required: true,
+    required: true,
+  },
+  correctAnswer: {
+    type: String,
+    validate: {
+      validator: function (value: string) {
+        return isIncluded(value, this.answers);
+      },
+      message: (answer: { value: string }) =>
+        `${answer.value} is not a valid answer`,
     },
+    required: true,
+  },
 });
 
 export { AbstractQuestionSchema, TrueAndFalseSchema, MultipleChoiceSchema };

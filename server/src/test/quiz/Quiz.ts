@@ -16,15 +16,15 @@ type typeMultipleChoice = {
 };
 
 const TrueFalse: typeTrueFalse = {
-    name: 'true and false question',
-    type: 'True-False',
-    correctAnswer: true,
+  name: 'true and false question',
+  type: 'True-False',
+  correctAnswer: true,
 };
 const MultipleChoice: typeMultipleChoice = {
-    name: 'multiple choice question',
-    type: 'Multiple-Choice',
-    answers: ['a', 'b', 'c', 'd'],
-    correctAnswer: 'a',
+  name: 'multiple choice question',
+  type: 'Multiple-Choice',
+  answers: ['a', 'b', 'c', 'd'],
+  correctAnswer: 'a',
 };
 
 interface IQuiz {
@@ -33,33 +33,33 @@ interface IQuiz {
 }
 
 class Quiz {
-    public title = 'quiz1';
-    public static trueFalse = TrueFalse;
-    public static multipleChoice = MultipleChoice;
+  public title = 'quiz1';
+  public static trueFalse = TrueFalse;
+  public static multipleChoice = MultipleChoice;
 
-    public static async saveQuiz() {
-        const user = await User.saveUser();
+  public static async saveQuiz() {
+    const user = await User.saveUser();
 
-        const quiz = new QuizModel(
-            Object.assign(new Quiz(), { owner: user._id })
-        );
-        await quiz.save();
-        return quiz;
-    }
+    const quiz = new QuizModel(
+      Object.assign(new Quiz(), { owner: user._id })
+    );
+    await quiz.save();
+    return quiz;
+  }
 
-    constructor(
+  constructor(
         public questions: (typeTrueFalse | typeMultipleChoice)[] = [
-            Quiz.trueFalse,
-            Quiz.multipleChoice,
+          Quiz.trueFalse,
+          Quiz.multipleChoice,
         ]
-    ) {}
+  ) {}
 
-    public toString() {
-        return {
-            title: this.title,
-            questions: this.questions,
-        };
-    }
+  public toString() {
+    return {
+      title: this.title,
+      questions: this.questions,
+    };
+  }
 }
 
 export { Quiz, IQuiz };

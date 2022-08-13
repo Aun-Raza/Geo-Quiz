@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import {
-    AbstractQuestionSchema,
-    TrueAndFalseSchema,
-    MultipleChoiceSchema,
+  AbstractQuestionSchema,
+  TrueAndFalseSchema,
+  MultipleChoiceSchema,
 } from './schemas';
 import { isUser } from './validators/custom-validator.quiz';
 import mongoose, { Schema, model, ObjectId } from 'mongoose';
@@ -16,26 +16,26 @@ interface IQuiz {
 }
 
 const QuizSchema = new Schema<IQuiz>(
-    {
-        title: { type: String, minlength: 5, maxlength: 25, required: true },
-        questions: {
-            type: [AbstractQuestionSchema],
-            default: undefined,
-            required: true,
-        },
-        owner: {
-            type: mongoose.Types.ObjectId,
-            ref: 'User',
-            validate: {
-                validator: function (v: ObjectId) {
-                    return isUser(v);
-                },
-                message: 'Quiz must have a registered user',
-            },
-            required: true,
-        },
+  {
+    title: { type: String, minlength: 5, maxlength: 25, required: true },
+    questions: {
+      type: [AbstractQuestionSchema],
+      default: undefined,
+      required: true,
     },
-    { timestamps: true }
+    owner: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      validate: {
+        validator: function (v: ObjectId) {
+          return isUser(v);
+        },
+        message: 'Quiz must have a registered user',
+      },
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
 /* 
@@ -45,8 +45,8 @@ const QuizSchema = new Schema<IQuiz>(
 
 QuizSchema.path('questions').discriminator('True-False', TrueAndFalseSchema);
 QuizSchema.path('questions').discriminator(
-    'Multiple-Choice',
-    MultipleChoiceSchema
+  'Multiple-Choice',
+  MultipleChoiceSchema
 );
 
 const QuizModel = model<IQuiz>('Quiz', QuizSchema);

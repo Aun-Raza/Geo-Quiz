@@ -1,19 +1,19 @@
 import { auth } from '../middleware/auth';
 import express from 'express';
 import {
-    getQuizzes,
-    getQuiz,
-    createQuiz,
-    updateQuiz,
-    deleteQuiz,
+  getQuizzes,
+  getQuiz,
+  createQuiz,
+  updateQuiz,
+  deleteQuiz,
 } from '../controller/quiz/controller.quiz';
 import {
-    getUsers,
-    getUser,
-    registerUser,
-    loginUser,
-    updateUser,
-    deleteUser,
+  getUsers,
+  getUser,
+  registerUser,
+  loginUser,
+  updateUser,
+  deleteUser,
 } from '../controller/user/controller.user';
 import { isObjectID } from '../middleware/objectID';
 import { notFound, errorHandler } from '../middleware/error';

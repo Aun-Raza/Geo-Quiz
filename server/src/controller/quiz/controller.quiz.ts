@@ -15,40 +15,40 @@ interface CustomRequest extends Request {
  * GET METHOD(s)
  */
 export async function getQuizzes(req: Request, res: Response) {
-    log.info('GET /api/getQuizzes', { service: 'getQuizzes' });
+  log.info('GET /api/getQuizzes', { service: 'getQuizzes' });
 
-    const quizDocs = await QuizModel.find().populate({
-        path: 'owner',
-        select: 'username email',
-    });
+  const quizDocs = await QuizModel.find().populate({
+    path: 'owner',
+    select: 'username email',
+  });
 
-    if (!quizDocs.length) {
-        res.status(404);
-        throw new Error('no quizzes are found.');
-    }
+  if (!quizDocs.length) {
+    res.status(404);
+    throw new Error('no quizzes are found.');
+  }
 
-    const selectedQuizDocsProps = quizDocs.map((quizDoc) => {
-        return _.pick(quizDoc, ['_id', 'title', 'questions', 'owner']);
-    });
+  const selectedQuizDocsProps = quizDocs.map((quizDoc) => {
+    return _.pick(quizDoc, ['_id', 'title', 'questions', 'owner']);
+  });
 
-    res.json(selectedQuizDocsProps);
+  res.json(selectedQuizDocsProps);
 }
 
 export async function getQuiz(req: Request, res: Response) {
-    log.info('GET /api/getQuiz/:id', { service: 'getQuiz' });
+  log.info('GET /api/getQuiz/:id', { service: 'getQuiz' });
 
-    const { id } = req.params;
-    const quizDoc = await QuizModel.findById(id).populate({
-        path: 'owner',
-        select: 'username email',
-    });
+  const { id } = req.params;
+  const quizDoc = await QuizModel.findById(id).populate({
+    path: 'owner',
+    select: 'username email',
+  });
 
-    if (!quizDoc) {
-        res.status(404);
-        throw new Error(`quizId: ${id} does not exist.`);
-    }
+  if (!quizDoc) {
+    res.status(404);
+    throw new Error(`quizId: ${id} does not exist.`);
+  }
 
-    res.json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+  res.json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
 }
 
 /**
@@ -57,33 +57,33 @@ export async function getQuiz(req: Request, res: Response) {
 
 // TODO: Transaction HERE
 export async function createQuiz(req: CustomRequest, res: Response) {
-    log.info('POST /api/createQuiz', { service: 'createQuiz' });
+  log.info('POST /api/createQuiz', { service: 'createQuiz' });
 
-    const quizReqBody = await Joi.validateAsync(req.body || null).catch(
-        (error) => {
-            res.status(400);
-            throw error;
-        }
-    );
-
-    const multipleChoices = quizReqBody.questions.filter(
-        (question: { type: string }) => question.type === 'Multiple-Choice'
-    );
-
-    if (!isMCValid(multipleChoices)) {
-        res.status(400);
-        throw new Error('multiple choice format is not valid');
+  const quizReqBody = await Joi.validateAsync(req.body || null).catch(
+    (error) => {
+      res.status(400);
+      throw error;
     }
+  );
 
-    const { _id } = req.user;
-    const quizDoc = new QuizModel(Object.assign(quizReqBody, { owner: _id }));
-    await quizDoc.save();
+  const multipleChoices = quizReqBody.questions.filter(
+    (question: { type: string }) => question.type === 'Multiple-Choice'
+  );
 
-    await UserModel.findByIdAndUpdate(_id, { $push: { quizzes: quizDoc._id } });
+  if (!isMCValid(multipleChoices)) {
+    res.status(400);
+    throw new Error('multiple choice format is not valid');
+  }
 
-    res.status(201).json(
-        _.pick(quizDoc, ['_id', 'title', 'questions', 'owner'])
-    );
+  const { _id } = req.user;
+  const quizDoc = new QuizModel(Object.assign(quizReqBody, { owner: _id }));
+  await quizDoc.save();
+
+  await UserModel.findByIdAndUpdate(_id, { $push: { quizzes: quizDoc._id } });
+
+  res.status(201).json(
+    _.pick(quizDoc, ['_id', 'title', 'questions', 'owner'])
+  );
 }
 
 /**
@@ -91,27 +91,27 @@ export async function createQuiz(req: CustomRequest, res: Response) {
  */
 
 export async function updateQuiz(req: Request, res: Response) {
-    log.info('PUT /api/updateQuiz/:id', { service: 'updateQuiz' });
+  log.info('PUT /api/updateQuiz/:id', { service: 'updateQuiz' });
 
-    const quizReqBody = await Joi.validateAsync(req.body || null).catch(
-        (error) => {
-            res.status(400);
-            throw error;
-        }
-    );
-
-    const { id } = req.params;
-    const quizDoc = await QuizModel.findByIdAndUpdate(id, quizReqBody, {
-        returnDocument: 'after',
-    });
-    if (!quizDoc) {
-        res.status(404);
-        throw new Error(`quizId: ${id} does not exist.`);
+  const quizReqBody = await Joi.validateAsync(req.body || null).catch(
+    (error) => {
+      res.status(400);
+      throw error;
     }
+  );
 
-    res.status(201).json(
-        _.pick(quizDoc, ['_id', 'title', 'questions', 'owner'])
-    );
+  const { id } = req.params;
+  const quizDoc = await QuizModel.findByIdAndUpdate(id, quizReqBody, {
+    returnDocument: 'after',
+  });
+  if (!quizDoc) {
+    res.status(404);
+    throw new Error(`quizId: ${id} does not exist.`);
+  }
+
+  res.status(201).json(
+    _.pick(quizDoc, ['_id', 'title', 'questions', 'owner'])
+  );
 }
 
 /**
@@ -120,21 +120,21 @@ export async function updateQuiz(req: Request, res: Response) {
 
 // TODO: Transaction HERE
 export async function deleteQuiz(req: CustomRequest, res: Response) {
-    log.info('DELETE /api/deleteQuiz/:id', { service: 'deleteQuiz' });
+  log.info('DELETE /api/deleteQuiz/:id', { service: 'deleteQuiz' });
 
-    const { params } = req;
-    const quizDoc = await QuizModel.findByIdAndDelete(params.id);
-    if (!quizDoc) {
-        res.status(404);
-        throw new Error(`quizId: ${params.id} does not exist`);
-    }
+  const { params } = req;
+  const quizDoc = await QuizModel.findByIdAndDelete(params.id);
+  if (!quizDoc) {
+    res.status(404);
+    throw new Error(`quizId: ${params.id} does not exist`);
+  }
 
-    const userDoc = await UserModel.findById(req.user._id);
-    const filter = userDoc.quizzes.filter((quizId: mongoose.Types.ObjectId) => {
-        quizId !== quizDoc._id;
-    });
-    userDoc.quizzes = filter;
-    await userDoc.save();
+  const userDoc = await UserModel.findById(req.user._id);
+  const filter = userDoc.quizzes.filter((quizId: mongoose.Types.ObjectId) => {
+    quizId !== quizDoc._id;
+  });
+  userDoc.quizzes = filter;
+  await userDoc.save();
 
-    res.json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+  res.json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
 }
