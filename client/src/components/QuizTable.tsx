@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, { Fragment } from 'react';
 import { Quiz } from '../interfaces/Quiz';
 import Table from './common/Table';
 
 interface QuizTableProps {
-    quizzes: Quiz[];
+  quizzes: Quiz[];
 }
 
 function QuizTable({ quizzes }: QuizTableProps) {
@@ -19,7 +19,12 @@ function QuizTable({ quizzes }: QuizTableProps) {
     }),
   };
 
-  return <Table data={data} />;
+  return (
+    <Fragment>
+      <h2 className='my-3'>Quiz Table</h2>
+      <Table data={data} />
+    </Fragment>
+  );
 }
 
 export default QuizTable;

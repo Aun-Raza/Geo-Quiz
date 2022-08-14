@@ -5,38 +5,45 @@ import QuizService from './services/quizzes';
 import UserService from './services/users';
 import { Quiz } from './interfaces/Quiz';
 import LoginForm from './components/LoginForm';
-import { loginProps } from './interfaces/User';
+import { loginProps, User } from './interfaces/User';
+import jwtDecode from 'jwt-decode';
 import './App.css';
 
 function App() {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [user, setUser] = useState<User>();
 
   useEffect(() => {
-    getQuizzes();
+    populateQuizzes();
+    populateUser();
   }, []);
 
-  async function getQuizzes() {
+  async function populateQuizzes() {
     const { data: quizzes } = await QuizService.getQuizzes();
     setQuizzes(quizzes);
   }
 
-  async function loginUser({ username, password }: loginProps) {
-    const { data: user, headers } = await UserService.loginUser({
-      username,
-      password,
-    });
+  function populateUser() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const user: User = jwtDecode(token);
+    setUser(user);
+  }
+
+  async function loginUser(body: loginProps) {
+    const { headers } = await UserService.loginUser(body);
+
     localStorage.setItem('token', headers['x-auth-token']);
-    console.log(user);
+    populateUser();
   }
 
   return (
     <Fragment>
-      <NavBar />
+      <NavBar user={user} />
       <div className='container'>
-        <h2 className='my-3'>Quiz Table</h2>
         <QuizTable quizzes={quizzes} />
-        <h2 className='my-3'>Login Form</h2>
-        <LoginForm doLogin={loginUser} />
+        <LoginForm loginUser={loginUser} />
       </div>
     </Fragment>
   );

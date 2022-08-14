@@ -68,10 +68,12 @@ export async function registerUser(req: Request, res: Response) {
   userDoc = new UserModel(Object.assign(userReqBody, { hash }));
   await userDoc.save();
 
-  const payload = { _id: userDoc._id, username: userDoc.username };
-  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'), {
-    expiresIn: 1800,
-  });
+  const payload = {
+    _id: userDoc._id,
+    username: userDoc.username,
+    email: userDoc.email,
+  };
+  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
 
   res
     .header('x-auth-token', token)
@@ -96,11 +98,12 @@ export async function loginUser(req: Request, res: Response) {
     throw new Error('Username or password is invalid.');
   }
 
-  const token = jwt.sign(
-    { _id: userDoc._id, username: userDoc.username },
-    config.get('JWT_PRIVATE_KEY'),
-    { expiresIn: 1800 }
-  );
+  const payload = {
+    _id: userDoc._id,
+    username: userDoc.username,
+    email: userDoc.email,
+  };
+  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
 
   res
     .header('x-auth-token', token)
@@ -136,11 +139,12 @@ export async function updateUser(req: CustomRequest, res: Response) {
     throw new Error('Cannot find targeted user in the registry.');
   }
 
-  const token = jwt.sign(
-    { _id: userDoc._id, username: userDoc.username },
-    config.get('JWT_PRIVATE_KEY'),
-    { expiresIn: 1800 }
-  );
+  const payload = {
+    _id: userDoc._id,
+    username: userDoc.username,
+    email: userDoc.email,
+  };
+  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
 
   res
     .header('x-auth-token', token)

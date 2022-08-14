@@ -1,20 +1,20 @@
-import * as React from 'react';
+import React, { Fragment } from 'react';
 import { useState } from 'react';
 import { loginProps } from '../interfaces/User';
 import Form from './common/Form';
 import { InputProps } from '../interfaces/Form';
 
 interface LoginFormProps {
-    doLogin: ({ username, password }: loginProps) => void;
+  loginUser: ({ username, password }: loginProps) => void;
 }
 
-function LoginForm({ doLogin }: LoginFormProps) {
+function LoginForm({ loginUser }: LoginFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   function submitForm(e: React.FormEvent) {
     e.preventDefault();
-    doLogin({ username, password });
+    loginUser({ username, password });
   }
 
   const inputs: InputProps[] = [
@@ -31,7 +31,12 @@ function LoginForm({ doLogin }: LoginFormProps) {
     },
   ];
 
-  return <Form onSubmit={submitForm} inputs={inputs} />;
+  return (
+    <Fragment>
+      <h2 className='my-3'>Login Form</h2>
+      <Form onSubmit={submitForm} inputs={inputs} />
+    </Fragment>
+  );
 }
 
 export default LoginForm;
