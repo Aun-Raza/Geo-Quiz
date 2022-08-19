@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { loginProps } from '../interfaces/User';
+import { ILoginProps } from '../interfaces/IUser';
 
 interface SuccessMessage {
   msg: string;
@@ -10,7 +10,7 @@ class UserService {
     baseURL: 'http://localhost:8000',
   });
 
-  async loginUser({ username, password }: loginProps) {
+  async loginUser({ username, password }: ILoginProps) {
     const response = await this.http.post<SuccessMessage>('/api/loginUser', {
       username,
       password,

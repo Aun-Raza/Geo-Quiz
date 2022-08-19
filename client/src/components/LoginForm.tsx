@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { useState } from 'react';
-import { loginProps } from '../interfaces/User';
+import { ILoginProps } from '../interfaces/IUser';
 import Form from './common/Form';
-import { InputProps } from '../interfaces/Form';
+const { renderInputText, renderSubmitButton } = Form;
 
 interface LoginFormProps {
-  loginUser: ({ username, password }: loginProps) => void;
+  loginUser: ({ username, password }: ILoginProps) => void;
 }
 
 function LoginForm({ loginUser }: LoginFormProps) {
@@ -17,24 +17,22 @@ function LoginForm({ loginUser }: LoginFormProps) {
     loginUser({ username, password });
   }
 
-  const inputs: InputProps[] = [
-    {
-      label: 'username',
-      value: username,
-      onChange: setUsername,
-    },
-    {
-      label: 'password',
-      value: password,
-      onChange: setPassword,
-      type: 'password',
-    },
-  ];
-
   return (
     <Fragment>
       <h2 className='my-3'>Login Form</h2>
-      <Form onSubmit={submitForm} inputs={inputs} />
+      <Form onSubmit={submitForm}>
+        {renderInputText({
+          label: 'username',
+          value: username,
+          onChange: setUsername,
+        })}
+        {renderInputText({
+          label: 'password',
+          value: password,
+          onChange: setPassword,
+        })}
+        {renderSubmitButton()}
+      </Form>
     </Fragment>
   );
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Quiz } from '../interfaces/Quiz';
+import { IQuiz } from '../interfaces/IQuiz';
 
 class QuizService {
   http = axios.create({
@@ -7,7 +7,7 @@ class QuizService {
   });
 
   async getQuizzes() {
-    const response = await this.http.get<Quiz[]>('/api/getQuizzes');
+    const response = await this.http.get<IQuiz[]>('/api/getQuizzes');
     return response;
   }
 }

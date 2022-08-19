@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User } from '../interfaces/User';
+import { IUser } from '../interfaces/IUser';
 
 interface NavBarProps {
-  user: User | undefined;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  user: IUser | undefined;
+  setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
 }
 
 function NavBar({ user, setUser }: NavBarProps) {
@@ -38,7 +38,7 @@ function NavBar({ user, setUser }: NavBarProps) {
             <Link className='nav-link' to='/'>
               Home
             </Link>
-            <Link className='nav-link' to='/'>
+            <Link className='nav-link' to='/quizzes'>
               Quizzes
             </Link>
             {user ? (

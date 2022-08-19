@@ -1,20 +1,26 @@
 import React, { Fragment } from 'react';
-import { Quiz } from '../interfaces/Quiz';
+import { Link } from 'react-router-dom';
+import { IQuiz } from '../interfaces/IQuiz';
 import Table from './common/Table';
 
-interface QuizTableProps {
-  quizzes: Quiz[];
+interface IQuizTableProps {
+  quizzes: IQuiz[];
 }
 
-function QuizTable({ quizzes }: QuizTableProps) {
+function QuizTable({ quizzes }: IQuizTableProps) {
   const data = {
-    columns: ['_id', 'title', '# of questions', 'owner'],
+    columns: [
+      { path: '_id' },
+      { path: 'title' },
+      { path: 'questions' },
+      { path: 'owner' },
+    ],
     rows: quizzes.map(({ _id, title, questions, owner }) => {
       return {
-        _id,
-        title,
-        questions: questions.length,
-        owner: owner.username,
+        _id: { text: _id, element: <Link to={`/quiz/${_id}`}>{_id}</Link> },
+        title: { text: title },
+        questions: { text: questions.length },
+        owner: { text: owner.username },
       };
     }),
   };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface TableHeaderProps {
-    columns: string[];
+  columns: { path: string }[];
 }
 
 function TableHeader({ columns }: TableHeaderProps) {
@@ -9,7 +9,7 @@ function TableHeader({ columns }: TableHeaderProps) {
     <thead>
       <tr>
         {columns.map((column) => {
-          return <th key={column}>{column}</th>;
+          return <th key={column.path}>{column.path}</th>;
         })}
       </tr>
     </thead>

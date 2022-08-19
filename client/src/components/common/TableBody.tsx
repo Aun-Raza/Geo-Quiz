@@ -1,19 +1,23 @@
-import * as React from 'react';
+import React from 'react';
 
 interface TableBodyProps {
-  data: {
-    [key: string]: string | number;
+  rows: {
+    [key: string]: { text: string | number; element?: JSX.Element };
   }[];
 }
 
-function TableBody({ data }: TableBodyProps) {
+function TableBody({ rows }: TableBodyProps) {
   return (
     <tbody>
-      {data.map((row) => {
+      {rows.map((row) => {
         return (
-          <tr key={row._id}>
-            {Object.values(row).map((value, index) => {
-              return <td key={row._id.toString() + index}>{value}</td>;
+          <tr key={row._id.text}>
+            {Object.values(row).map((column, index) => {
+              return (
+                <td key={column.text.toString() + index}>
+                  {column.element || column.text}
+                </td>
+              );
             })}
           </tr>
         );

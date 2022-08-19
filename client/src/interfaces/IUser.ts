@@ -1,10 +1,10 @@
-export interface User {
+export interface IUser {
   _id: string;
   username: string;
   email: string;
 }
 
-export interface loginProps {
+export interface ILoginProps {
   username: string;
   password: string;
 }
