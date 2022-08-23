@@ -7,15 +7,15 @@ import LoginForm from './components/LoginForm';
 import NotFound from './components/NotFound';
 import UserService from './services/users';
 import jwtDecode from 'jwt-decode';
-import { ILoginProps, IUser } from './interfaces/IUser';
-import { IQuiz } from './interfaces/IQuiz';
+import { LoginProps, UserProps } from './types/types.user';
+import { QuizProps } from './types/types.quiz';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import Quiz from './components/Quiz';
 
 function App() {
-  const [quizzes, setQuizzes] = useState<IQuiz[]>([]);
-  const [user, setUser] = useState<IUser>();
+  const [quizzes, setQuizzes] = useState<QuizProps[]>([]);
+  const [user, setUser] = useState<UserProps>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,11 +32,11 @@ function App() {
     const token = localStorage.getItem('token');
     if (!token) return;
 
-    const user: IUser = jwtDecode(token);
+    const user: UserProps = jwtDecode(token);
     setUser(user);
   }
 
-  async function loginUser(body: ILoginProps) {
+  async function loginUser(body: LoginProps) {
     try {
       const { headers } = await UserService.loginUser(body);
 

@@ -1,40 +1,45 @@
 import React, { Fragment } from 'react';
-import { useState } from 'react';
-import { ILoginProps } from '../interfaces/IUser';
+import { LoginFormProps } from '../types/types.user';
 import Form from './common/Form';
-const { renderInputText, renderSubmitButton } = Form;
+import FormInputs from '../class/FormInputs';
 
-interface LoginFormProps {
-  loginUser: ({ username, password }: ILoginProps) => void;
-}
+class LoginForm<T extends LoginFormProps> extends FormInputs<T> {
+  state = { username: '', password: '' };
 
-function LoginForm({ loginUser }: LoginFormProps) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  function submitForm(e: React.FormEvent) {
+  submitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    loginUser({ username, password });
+    const { username, password } = this.state;
+    this.props.loginUser({
+      username,
+      password,
+    });
+  };
+
+  constructor(props: T) {
+    super(props);
   }
 
-  return (
-    <Fragment>
-      <h2 className='my-3'>Login Form</h2>
-      <Form onSubmit={submitForm}>
-        {renderInputText({
-          label: 'username',
-          value: username,
-          onChange: setUsername,
-        })}
-        {renderInputText({
-          label: 'password',
-          value: password,
-          onChange: setPassword,
-        })}
-        {renderSubmitButton()}
-      </Form>
-    </Fragment>
-  );
+  render() {
+    const { username, password } = this.state;
+    return (
+      <Fragment>
+        <h2 className='my-3'>Login Form</h2>
+        <Form onSubmit={this.submitForm}>
+          {this.renderInputText({
+            label: 'username',
+            value: username,
+            onChange: (e) => this.setState({ username: e }),
+          })}
+          {this.renderInputText({
+            label: 'password',
+            value: password,
+            onChange: (e) => this.setState({ password: e }),
+          })}
+          {this.renderSubmitButton()}
+        </Form>
+      </Fragment>
+    );
+  }
 }
 
 export default LoginForm;

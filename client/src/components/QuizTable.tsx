@@ -1,13 +1,9 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { IQuiz } from '../interfaces/IQuiz';
+import { QuizTableProps } from '../types/types.quiz';
 import Table from './common/Table';
 
-interface IQuizTableProps {
-  quizzes: IQuiz[];
-}
-
-function QuizTable({ quizzes }: IQuizTableProps) {
+function QuizTable({ quizzes }: QuizTableProps) {
   const data = {
     columns: [
       { path: '_id' },

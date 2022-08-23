@@ -1,33 +1,20 @@
-import * as React from 'react';
-import { IInputProps } from '../../interfaces/IForm';
-import Input from './Input';
-
-interface FormProps {
-  children: React.ReactNode[];
-  onSubmit: (e: React.FormEvent) => void;
-}
+import React from 'react';
+import { FormProps } from '../../types/types.form';
 
 class Form extends React.Component<FormProps> {
-  static renderInputText({ label, ...rest }: IInputProps) {
-    return <Input key={label} label={label} {...rest} />;
-  }
-
-  static renderSubmitButton() {
-    return (
-      <button type='submit' className='btn btn-primary my-2'>
-        Submit
-      </button>
-    );
-  }
+  // static renderRadioButton({ name, id, label }: RadioButtonProps) {
+  //   return <RadioButton label={label} name={name} id={id} />;
+  // }
 
   constructor(props: FormProps) {
     super(props);
   }
 
   render() {
+    const { onSubmit, children } = this.props;
     return (
-      <form onSubmit={this.props.onSubmit} className='w-50'>
-        {this.props.children}
+      <form onSubmit={onSubmit} className='w-50'>
+        {children}
       </form>
     );
   }

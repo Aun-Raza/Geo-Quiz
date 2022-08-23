@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IInputProps } from '../../interfaces/IForm';
+import { InputProps } from '../../types/types.form';
 
-function Input({ label, value, onChange, type = 'text' }: IInputProps) {
+function Input({ label, value, onChange, type = 'text' }: InputProps) {
   return (
     <div className='form-group'>
       <label htmlFor={label} className='form-label my-2'>
@@ -18,4 +18,4 @@ function Input({ label, value, onChange, type = 'text' }: IInputProps) {
   );
 }
 
-export default Input;
+export { Input };

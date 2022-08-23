@@ -1,11 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { IUser } from '../interfaces/IUser';
-
-interface NavBarProps {
-  user: IUser | undefined;
-  setUser: React.Dispatch<React.SetStateAction<IUser | undefined>>;
-}
+import { NavBarProps } from '../types/types.user';
 
 function NavBar({ user, setUser }: NavBarProps) {
   function logout() {
