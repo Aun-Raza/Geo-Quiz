@@ -9,7 +9,7 @@ import UserService from './services/users';
 import jwtDecode from 'jwt-decode';
 import { LoginProps, UserProps } from './types/types.user';
 import { QuizProps } from './types/types.quiz';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import './App.css';
 import Quiz from './components/Quiz';
 
@@ -53,11 +53,12 @@ function App() {
       <NavBar user={user} setUser={setUser} />
       <div className='container'>
         <Routes>
-          <Route path='/quiz/:id' element={<Quiz />} />
+          <Route path='/quiz/:id' element={<Quiz quizzes={quizzes} />} />
           <Route path='/quizzes' element={<QuizTable quizzes={quizzes} />} />
           <Route path='/login' element={<LoginForm loginUser={loginUser} />} />
+          <Route path='/not-found' element={<NotFound />} />
           <Route path='/' element={<Home />} />
-          <Route path='*' element={<NotFound />} />
+          <Route path='*' element={<Navigate replace to='/not-found' />} />
         </Routes>
       </div>
     </Fragment>
