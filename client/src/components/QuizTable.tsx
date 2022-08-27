@@ -1,7 +1,11 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { QuizTableProps } from '../types/types.quiz';
+import { QuizProps } from '../types/types.quiz';
 import Table from './common/Table';
+
+interface QuizTableProps {
+  quizzes: QuizProps[];
+}
 
 function QuizTable({ quizzes }: QuizTableProps) {
   const data = {
@@ -11,11 +15,11 @@ function QuizTable({ quizzes }: QuizTableProps) {
       { path: 'questions' },
       { path: 'owner' },
     ],
-    rows: quizzes.map(({ _id, title, questions, owner }) => {
+    rows: quizzes.map(({ _id, title, numQuestions, owner }) => {
       return {
         _id: { text: _id, element: <Link to={`/quiz/${_id}`}>{_id}</Link> },
         title: { text: title },
-        questions: { text: questions.length },
+        questions: { text: numQuestions },
         owner: { text: owner.username },
       };
     }),

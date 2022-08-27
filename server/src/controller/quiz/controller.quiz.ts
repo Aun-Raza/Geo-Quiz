@@ -8,7 +8,7 @@ import Joi from '../../model/quiz/validators/joi-validator.quiz';
 import _ from 'lodash';
 
 interface CustomRequest extends Request {
-    user: { _id: ObjectId };
+  user: { _id: ObjectId };
 }
 
 /**
@@ -28,7 +28,7 @@ export async function getQuizzes(req: Request, res: Response) {
   }
 
   const selectedQuizDocsProps = quizDocs.map((quizDoc) => {
-    return _.pick(quizDoc, ['_id', 'title', 'questions', 'owner']);
+    return _.pick(quizDoc, ['_id', 'title', 'numQuestions', 'owner']);
   });
 
   res.json(selectedQuizDocsProps);
@@ -81,9 +81,7 @@ export async function createQuiz(req: CustomRequest, res: Response) {
 
   await UserModel.findByIdAndUpdate(_id, { $push: { quizzes: quizDoc._id } });
 
-  res.status(201).json(
-    _.pick(quizDoc, ['_id', 'title', 'questions', 'owner'])
-  );
+  res.status(201).json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
 }
 
 /**
@@ -109,9 +107,7 @@ export async function updateQuiz(req: Request, res: Response) {
     throw new Error(`quizId: ${id} does not exist.`);
   }
 
-  res.status(201).json(
-    _.pick(quizDoc, ['_id', 'title', 'questions', 'owner'])
-  );
+  res.status(201).json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
 }
 
 /**

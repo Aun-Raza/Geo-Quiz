@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { QuizProps } from '../types/types.quiz';
+import { QuizFormProps, QuizProps } from '../types/types.quiz';
 
 class QuizService {
   http = axios.create({
@@ -8,6 +8,11 @@ class QuizService {
 
   async getQuizzes() {
     const response = await this.http.get<QuizProps[]>('/api/getQuizzes');
+    return response;
+  }
+
+  async getQuiz(id: string | undefined) {
+    const response = await this.http.get<QuizFormProps>('/api/getQuiz/' + id);
     return response;
   }
 }

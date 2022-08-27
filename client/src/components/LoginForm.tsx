@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { LoginFormProps } from '../types/types.user';
 import Form from './common/Form';
-import FormInputs from '../class/FormInputs';
+const { renderInputText, renderSubmitButton } = Form;
 
-class LoginForm<T extends LoginFormProps> extends FormInputs<T> {
+class LoginForm extends Component<LoginFormProps> {
   state = { username: '', password: '' };
 
   submitForm = (e: React.FormEvent) => {
@@ -15,7 +15,7 @@ class LoginForm<T extends LoginFormProps> extends FormInputs<T> {
     });
   };
 
-  constructor(props: T) {
+  constructor(props: LoginFormProps) {
     super(props);
   }
 
@@ -25,17 +25,17 @@ class LoginForm<T extends LoginFormProps> extends FormInputs<T> {
       <Fragment>
         <h2 className='my-3'>Login Form</h2>
         <Form onSubmit={this.submitForm}>
-          {this.renderInputText({
+          {renderInputText({
             label: 'username',
             value: username,
             onChange: (e) => this.setState({ username: e }),
           })}
-          {this.renderInputText({
+          {renderInputText({
             label: 'password',
             value: password,
             onChange: (e) => this.setState({ password: e }),
           })}
-          {this.renderSubmitButton()}
+          {renderSubmitButton()}
         </Form>
       </Fragment>
     );
