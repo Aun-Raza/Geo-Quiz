@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { LoginFormProps } from '../types/types.user';
-import Form from './common/Form';
-const { renderInputText, renderSubmitButton } = Form;
+import Form, { renderInputText, renderSubmitButton } from './common/Form';
 
 class LoginForm extends Component<LoginFormProps> {
   state = { username: '', password: '' };

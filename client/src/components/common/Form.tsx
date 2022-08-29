@@ -9,28 +9,6 @@ import { Input } from './Input';
 import RadioButton from './RadioButton';
 
 class Form extends React.Component<FormProps> {
-  static renderInputText({ label, ...rest }: InputProps) {
-    return <Input key={label} label={label} {...rest} />;
-  }
-
-  static renderRadioButtons({ labels, name }: RadioButtonsProps) {
-    return labels.map((label, index) => {
-      return Form.renderRadioButton({ label, name, id: label + index });
-    });
-  }
-
-  private static renderRadioButton({ label, name, id }: RadioButtonProps) {
-    return <RadioButton label={label} name={name} id={id} key={id} />;
-  }
-
-  static renderSubmitButton() {
-    return (
-      <button type='submit' className='btn btn-primary my-2'>
-        Submit
-      </button>
-    );
-  }
-
   constructor(props: FormProps) {
     super(props);
   }
@@ -43,6 +21,28 @@ class Form extends React.Component<FormProps> {
       </form>
     );
   }
+}
+
+function renderRadioButton({ label, name, id }: RadioButtonProps) {
+  return <RadioButton label={label} name={name} id={id} key={id} />;
+}
+
+export function renderInputText({ label, ...rest }: InputProps) {
+  return <Input key={label} label={label} {...rest} />;
+}
+
+export function renderRadioButtons({ labels, name }: RadioButtonsProps) {
+  return labels.map((label, index) => {
+    return renderRadioButton({ label, name, id: label + index });
+  });
+}
+
+export function renderSubmitButton() {
+  return (
+    <button type='submit' className='btn btn-primary my-2'>
+      Submit
+    </button>
+  );
 }
 
 export default Form;
