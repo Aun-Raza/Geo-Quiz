@@ -17,10 +17,21 @@ function QuizTable({ quizzes }: QuizTableProps) {
     ],
     rows: quizzes.map(({ _id, title, numQuestions, owner }) => {
       return {
-        _id: { text: _id, element: <Link to={`/quiz/${_id}`}>{_id}</Link> },
-        title: { text: title },
+        _id: { text: _id },
+        title: {
+          text: title,
+          element: <Link to={`/quiz/${_id}`}>{title}</Link>,
+        },
         questions: { text: numQuestions },
         owner: { text: owner.username },
+        edit: {
+          text: 'edit',
+          element: (
+            <button className='btn btn-outline-primary'>
+              <Link to={`/quiz-form/${_id}`}>Edit</Link>
+            </button>
+          ),
+        },
       };
     }),
   };

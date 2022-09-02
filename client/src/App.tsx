@@ -5,13 +5,14 @@ import QuizService from './services/quizzes';
 import QuizTable from './components/QuizTable';
 import LoginForm from './components/LoginForm';
 import NotFound from './components/NotFound';
-import QuizForm from './components/QuizForm';
+import Quiz from './components/Quiz';
 import UserService from './services/users';
 import jwtDecode from 'jwt-decode';
 import { LoginProps, UserProps } from './types/types.user';
 import { QuizProps } from './types/types.quiz';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import './App.css';
+import QuizForm from './components/QuizForm';
 
 function App() {
   const [quizzes, setQuizzes] = useState<QuizProps[]>([]);
@@ -42,7 +43,7 @@ function App() {
 
       localStorage.setItem('token', headers['x-auth-token']);
       populateUser();
-      navigate('/quizzes');
+      navigate('/quizzes-table');
     } catch (ex) {
       console.log(ex);
     }
@@ -53,8 +54,12 @@ function App() {
       <NavBar user={user} setUser={setUser} />
       <div className='container'>
         <Routes>
-          <Route path='/quiz/:id' element={<QuizForm />} />
-          <Route path='/quizzes' element={<QuizTable quizzes={quizzes} />} />
+          <Route path='/quiz-form/:id' element={<QuizForm />} />
+          <Route path='/quiz/:id' element={<Quiz />} />
+          <Route
+            path='/quizzes-table'
+            element={<QuizTable quizzes={quizzes} />}
+          />
           <Route path='/login' element={<LoginForm loginUser={loginUser} />} />
           <Route path='/not-found' element={<NotFound />} />
           <Route path='/' element={<Home />} />

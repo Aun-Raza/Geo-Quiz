@@ -33,7 +33,7 @@ function NavBar({ user, setUser }: NavBarProps) {
             <Link className='nav-link' to='/'>
               Home
             </Link>
-            <Link className='nav-link' to='/quizzes'>
+            <Link className='nav-link' to='/quizzes-table'>
               Quizzes
             </Link>
             {user ? (

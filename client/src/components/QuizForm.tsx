@@ -1,81 +1,83 @@
-/* eslint-disable indent */
-import React, { Fragment, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { QuizFormProps } from '../types/types.quiz';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import QuizService from '../services/quizzes';
-import { useNavigate } from 'react-router-dom';
-import Form, { renderSubmitButton } from './common/Form';
-import Question from './Question';
+import { MultipleChoiceProps, TrueFalseProps } from '../types/types.quiz';
+import Form, { renderInputText, renderSubmitButton } from './common/Form';
+import QuestionInput from './QuestionInput';
 
 function QuizForm() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [quiz, setQuiz] = useState<QuizFormProps>();
-  const [result, setResult] = useState<boolean[] | string>();
+  const [title, setTitle] = useState<string>();
+  const [questions, setQuestions] =
+    useState<(MultipleChoiceProps | TrueFalseProps)[]>();
 
   useEffect(() => {
-    populateQuiz();
+    assignQuizForm();
   }, []);
 
-  async function populateQuiz() {
-    try {
-      const { data: quiz } = await QuizService.getQuiz(id);
-      setQuiz(quiz);
-    } catch (error) {
-      navigate('/not-found');
-    }
-  }
+  async function assignQuizForm() {
+    if (id === 'new') return;
 
-  function validateForm() {
     try {
-      if (!quiz) throw new Error('The quiz form is not rendered properly');
-      const result = quiz.questions.map(({ name, correctAnswer }) =>
-        validateAnswer(name, correctAnswer)
-      );
-      setResult(result);
+      const {
+        data: { title, questions },
+      } = await QuizService.getQuiz(id);
+      setTitle(title);
+      setQuestions(questions);
     } catch (ex: unknown) {
       const error = ex as Error;
-      setResult(error.message);
+      console.log(error.message);
+      navigate('/quizzes-table');
     }
   }
 
-  //TODO: TEMPLATE
-  function validateAnswer(name: string, correctAnswer: string | boolean) {
-    const getSelectedValue = document
-      .querySelector(`input[name="${name}"]:checked`)
-      ?.getAttribute('value');
+  // function addQuestion() {
+  //   return;
+  // }
 
-    if (!getSelectedValue)
-      throw new Error(`Question '${name}' must be answered`);
+  function edit(
+    question: MultipleChoiceProps | TrueFalseProps | undefined,
+    name: string
+  ) {
+    if (!questions || !question) return;
 
-    return getSelectedValue === correctAnswer.toString() ? true : false;
+    //deep clone
+    const clone = JSON.parse(JSON.stringify(questions));
+    const index = questions.indexOf(question);
+    clone[index].name = name;
+
+    setQuestions(clone);
   }
 
-  const submitForm = (e: React.FormEvent) => {
-    e.preventDefault();
-    validateForm();
-  };
+  function renderQuestions() {
+    if (questions) {
+      return questions.map((question, index) => (
+        <QuestionInput
+          key={index}
+          id={++index}
+          onEdit={edit}
+          question={question}
+        />
+      ));
+    }
+  }
 
-  if (!quiz) return null;
-  const { title, owner, questions } = quiz;
   return (
-    <Fragment>
-      <h2 className='mx-4 mt-4'>{title}</h2>
-      <span className='mx-4'> {owner.username}</span>
-      <Form onSubmit={submitForm}>
-        {questions.map((question) => {
-          return (
-            <Question key={question.name + question.type} question={question} />
-          );
-        })}
-        {renderSubmitButton()}
-      </Form>
-      {result && (
-        <div id='result' className='m-2 border p-2 rounded w-50'>
-          {typeof result === 'object' ? JSON.stringify(result) : result}
-        </div>
-      )}
-    </Fragment>
+    <Form
+      onSubmit={() => {
+        return;
+      }}
+    >
+      <h2 className='my-3'>Edit</h2>
+      {renderInputText({
+        label: 'title',
+        value: title || '',
+        onChange: setTitle,
+      })}
+      {renderQuestions()}
+      {renderSubmitButton()}
+    </Form>
   );
 }
 

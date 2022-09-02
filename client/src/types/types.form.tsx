@@ -12,7 +12,7 @@ export type RadioButtonProps = {
 export type InputProps = {
   label: string;
   value: string;
-  onChange: React.Dispatch<React.SetStateAction<string>>;
+  onChange: React.Dispatch<React.SetStateAction<string | undefined>>;
   type?: string;
 };
 
