@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React from 'react';
 import { FormProps } from '../../types/types.form';
 import {

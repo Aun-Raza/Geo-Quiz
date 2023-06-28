@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { QuizProps } from '../types/types.quiz';

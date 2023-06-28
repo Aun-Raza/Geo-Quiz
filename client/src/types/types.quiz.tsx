@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 interface QuizPropsTemplate {
   _id: number;
   title: string;

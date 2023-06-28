@@ -1,3 +1,5 @@
+/* eslint-disable linebreak-style */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavBarProps } from '../types/types.user';

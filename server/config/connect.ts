@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import mongoose from 'mongoose';
 import config from 'config';
 import log from '../src/log/logger';

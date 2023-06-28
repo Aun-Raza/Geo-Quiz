@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import bcrypt from 'bcrypt';
 import config from 'config';
 import jwt from 'jsonwebtoken';
@@ -153,7 +154,6 @@ export async function updateUser(req: CustomRequest, res: Response) {
     .json(_.pick(userDoc, ['_id', 'username', 'email', 'quizzes']));
 }
 
-// TODO: Transaction HERE
 export async function deleteUser(req: CustomRequest, res: Response) {
   log.info('PUT /api/deleteUser/:id', { service: 'deleteUser' });
 

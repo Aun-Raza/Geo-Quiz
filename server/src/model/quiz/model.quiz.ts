@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import {

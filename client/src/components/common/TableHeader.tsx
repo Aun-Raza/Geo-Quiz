@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import * as React from 'react';
 
 interface TableHeaderProps {

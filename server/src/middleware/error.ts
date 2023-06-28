@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import log from '../log/logger';
 import { Request, Response, NextFunction } from 'express';
 

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React, { useEffect, useState } from 'react';
 import { MultipleChoiceProps, TrueFalseProps } from '../types/types.quiz';
 import { renderInputText } from './common/Form';

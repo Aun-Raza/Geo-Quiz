@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import config from 'config';
 import cors from 'cors';
 import express from 'express';

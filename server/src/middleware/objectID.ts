@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import mongoose from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 

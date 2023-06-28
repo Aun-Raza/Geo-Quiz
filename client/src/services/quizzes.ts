@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import axios from 'axios';
 import { QuizFormProps, QuizProps } from '../types/types.quiz';
 

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { isMCValid } from '../../model/quiz/validators/custom-validator.quiz';
 import log from '../../log/logger';
 import mongoose, { ObjectId } from 'mongoose';
@@ -38,7 +39,10 @@ export async function getQuiz(req: Request, res: Response) {
   log.info('GET /api/getQuiz/:id', { service: 'getQuiz' });
 
   const { id } = req.params;
-  const quizDoc = await QuizModel.findById(id).populate({
+
+  const newId = new mongoose.Types.ObjectId(id);
+  console.log('ID:', newId);
+  const quizDoc = await QuizModel.findById(newId).populate({
     path: 'owner',
     select: 'username email',
   });
@@ -55,7 +59,6 @@ export async function getQuiz(req: Request, res: Response) {
  * POST METHOD(s)
  */
 
-// TODO: Transaction HERE
 export async function createQuiz(req: CustomRequest, res: Response) {
   log.info('POST /api/createQuiz', { service: 'createQuiz' });
 
@@ -114,7 +117,6 @@ export async function updateQuiz(req: Request, res: Response) {
  * DELETE METHOD(s)
  */
 
-// TODO: Transaction HERE
 export async function deleteQuiz(req: CustomRequest, res: Response) {
   log.info('DELETE /api/deleteQuiz/:id', { service: 'deleteQuiz' });
 

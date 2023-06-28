@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import axios from 'axios';
 import { LoginProps } from '../types/types.user';
 

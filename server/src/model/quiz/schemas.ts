@@ -1,18 +1,19 @@
+/* eslint-disable linebreak-style */
 import { isDuplicated, isIncluded } from './validators/schema-validator.quiz';
 import { Schema } from 'mongoose';
 
 interface AbstractQuestion {
-    name: string;
-    type: string;
+  name: string;
+  type: string;
 }
 
 interface TrueAndFalse {
-    correctAnswer: boolean;
+  correctAnswer: boolean;
 }
 
 interface MultipleChoice {
-    answers: [string];
-    correctAnswer: string;
+  answers: [string];
+  correctAnswer: string;
 }
 
 /* 

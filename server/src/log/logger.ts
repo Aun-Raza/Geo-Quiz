@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { createLogger, format } from 'winston';
 const { combine, timestamp, colorize, printf } = format;
 

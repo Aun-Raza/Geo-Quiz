@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .nav-item {
+    @apply p-3 cursor-pointer hover:bg-slate-200;
+  }
+
+  .btn {
+    @apply p-2 border-2 hover:bg-slate-100 rounded-lg cursor-pointer font-semibold block;
+  }
+
+  .input-text {
+    @apply border rounded-md ps-1 pb-1;
+  }
+}

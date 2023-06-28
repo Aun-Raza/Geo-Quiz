@@ -1,9 +1,10 @@
+/* eslint-disable linebreak-style */
 import config from 'config';
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 interface CustomRequest extends Request {
-    user?: string | jwt.JwtPayload;
+  user?: string | jwt.JwtPayload;
 }
 
 export function auth(req: CustomRequest, res: Response, next: NextFunction) {

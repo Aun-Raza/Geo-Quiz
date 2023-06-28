@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { auth } from '../middleware/auth';
 import express from 'express';
 import {

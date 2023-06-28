@@ -1,11 +1,12 @@
+/* eslint-disable linebreak-style */
 import mongoose, { Schema, model, ObjectId } from 'mongoose';
 
 interface IUser {
-    _id: ObjectId;
-    email: string;
-    username: string;
-    hash: string;
-    quizzes: mongoose.Types.ObjectId[];
+  _id: ObjectId;
+  email: string;
+  username: string;
+  hash: string;
+  quizzes: mongoose.Types.ObjectId[];
 }
 
 const UserSchema = new Schema<IUser>(

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React, { Component, Fragment } from 'react';
 import { LoginFormProps } from '../types/types.user';
 import Form, { renderInputText, renderSubmitButton } from './common/Form';

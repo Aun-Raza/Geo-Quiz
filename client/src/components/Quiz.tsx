@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable indent */
 import React, { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
