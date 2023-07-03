@@ -1,6 +1,6 @@
 interface QuizPropsAbstract {
   title: string;
-  owner: { username: string };
+  owner?: { username: string; _id: string };
 }
 
 export interface QuizTableProps extends QuizPropsAbstract {
@@ -9,14 +9,16 @@ export interface QuizTableProps extends QuizPropsAbstract {
 }
 
 export type TrueFalseProps = {
-  react_id?: number;
+  reactId?: string;
+  _id?: string;
   name: string;
   correctAnswer: boolean;
   type: 'True-False';
 };
 
 export type MultipleChoiceProps = {
-  react_id?: number;
+  reactId?: string;
+  _id?: string;
   name: string;
   answers: string[];
   correctAnswer: string;

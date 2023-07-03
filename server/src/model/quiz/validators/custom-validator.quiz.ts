@@ -16,7 +16,11 @@ export function isMCValid(
 }
 
 export async function isUser(id: ObjectId) {
-  const user = await UserModel.findById(id);
-  if (!user) return Promise.reject();
-  else return Promise.resolve();
+  try {
+    const user = await UserModel.findById(id);
+    if (!user) return Promise.reject();
+    else return Promise.resolve();
+  } catch (error) {
+    console.error('Error inside isUser:', error);
+  }
 }

@@ -20,7 +20,7 @@ export async function getQuizzes(req: Request, res: Response) {
 
   const quizDocs = await QuizModel.find().populate({
     path: 'owner',
-    select: 'username email',
+    select: 'username email _id',
   });
 
   if (!quizDocs.length) {
@@ -44,7 +44,7 @@ export async function getQuiz(req: Request, res: Response) {
   console.log('ID:', newId);
   const quizDoc = await QuizModel.findById(newId).populate({
     path: 'owner',
-    select: 'username email',
+    select: 'username email _id',
   });
 
   if (!quizDoc) {
@@ -62,29 +62,43 @@ export async function getQuiz(req: Request, res: Response) {
 export async function createQuiz(req: CustomRequest, res: Response) {
   log.info('POST /api/createQuiz', { service: 'createQuiz' });
 
-  const quizReqBody = await Joi.validateAsync(req.body || null).catch(
-    (error) => {
+  try {
+    const quizReqBody = await Joi.validateAsync(req.body || null).catch(
+      (error) => {
+        console.error('Error from Joi validation:', error);
+        res.status(400);
+        throw error;
+      }
+    );
+
+    const multipleChoices = quizReqBody.questions.filter(
+      (question: { type: string }) => question.type === 'Multiple-Choice'
+    );
+
+    if (!isMCValid(multipleChoices)) {
+      const mcError = new Error('multiple choice format is not valid');
+      console.error('Error from multiple choice validation:', mcError);
       res.status(400);
-      throw error;
+      throw mcError;
     }
-  );
 
-  const multipleChoices = quizReqBody.questions.filter(
-    (question: { type: string }) => question.type === 'Multiple-Choice'
-  );
+    const { _id } = req.user;
 
-  if (!isMCValid(multipleChoices)) {
-    res.status(400);
-    throw new Error('multiple choice format is not valid');
+    const quizDoc = new QuizModel(Object.assign(req.body, { owner: _id }));
+
+    await quizDoc.save().catch((error) => {
+      console.error('Error from saving quizDoc:', error);
+      throw error;
+    });
+
+    await UserModel.findByIdAndUpdate(_id, { $push: { quizzes: quizDoc._id } });
+
+    res
+      .status(201)
+      .json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+  } catch (error) {
+    console.error('Error thrown inside createQuiz:', error);
   }
-
-  const { _id } = req.user;
-  const quizDoc = new QuizModel(Object.assign(quizReqBody, { owner: _id }));
-  await quizDoc.save();
-
-  await UserModel.findByIdAndUpdate(_id, { $push: { quizzes: quizDoc._id } });
-
-  res.status(201).json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
 }
 
 /**

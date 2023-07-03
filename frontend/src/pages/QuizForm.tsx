@@ -1,89 +1,181 @@
-import { Fragment, useState } from 'react';
-import { MultipleChoiceProps, QuizAddProps, TrueFalseProps } from '../types';
+import { Fragment, useEffect, useState } from 'react';
+import {
+  IForm,
+  IQuestion,
+  MultipleChoiceProps,
+  QuizAddProps,
+  TrueFalseProps,
+} from '../types';
+import { UserProps } from '../types';
+import { useNavigate, useParams } from 'react-router-dom';
+import QuizService from '../services/service.quiz';
+import { v4 as uuid } from 'uuid';
 
-const QuizAddForm = () => {
+const QuizForm = ({
+  user,
+  formType,
+  onCreateQuiz,
+  onUpdateQuiz,
+}: {
+  user: UserProps | undefined;
+  formType: IForm;
+  onCreateQuiz: (quiz: QuizAddProps) => void;
+  onUpdateQuiz: (id: string, quiz: QuizAddProps) => void;
+}) => {
   const [quiz, setQuiz] = useState<QuizAddProps>({
     title: '',
-    owner: { username: '' },
     questions: [],
   });
 
-  enum QuestionType {
-    TF,
-    MC,
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    initQuiz();
+  }, []);
+
+  async function initQuiz() {
+    if (!user) {
+      return navigate('/login');
+    }
+
+    if (formType === IForm.Add) return;
+    else if (formType === IForm.Edit) {
+      const { data } = await QuizService.getQuiz(id);
+      data.questions.forEach((question) => {
+        const reactId = uuid();
+        question['reactId'] = reactId;
+        if (question.type === 'Multiple-Choice') {
+          const correctAnswerIndex = question.answers.findIndex(
+            (answer) => answer === question.correctAnswer
+          );
+          question['correctAnswerIndex'] = correctAnswerIndex;
+        }
+      });
+      setQuiz(data);
+    }
   }
 
-  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function deepCloneQuiz() {
+    return {
+      ...quiz,
+      questions: quiz.questions.map((question) => {
+        return { ...question };
+      }),
+    };
+  }
+
+  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const quizClone = { ...quiz };
-    quizClone.questions.forEach((question) => {
+    // deep clone for purpose of http
+    const quizClone = deepCloneQuiz();
+    const { questions } = quizClone;
+
+    // set correctAnswer relative to index positioning to answers
+    questions.forEach((question) => {
       if (question.type === 'Multiple-Choice') {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         question.correctAnswer = question.answers[question.correctAnswerIndex!];
       }
     });
 
-    console.log(quiz);
+    // for http capability, remove unneeded properties
+    delete quizClone['_id'];
+    delete quizClone['owner'];
+    questions.forEach((question) => {
+      delete question['reactId'];
+      delete question['_id'];
+      if (question.type === 'Multiple-Choice') {
+        delete question['correctAnswerIndex'];
+      }
+    });
+
+    console.log(quizClone);
+
+    try {
+      if (formType === IForm.Add) {
+        await onCreateQuiz(quizClone);
+      } else if (formType === IForm.Edit) {
+        await onUpdateQuiz(id || '', quizClone);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleQuizTitle(title: string) {
-    const quizClone = { ...quiz };
+    const quizClone = deepCloneQuiz();
     quizClone.title = title;
     setQuiz(quizClone);
   }
 
-  function handleQuestionName(name: string, key: number) {
-    const quizClone = { ...quiz };
-    quizClone.questions[key].name = name;
+  function handleQuestionName(name: string, key: string) {
+    const quizClone = deepCloneQuiz();
+    const question = quizClone.questions.find(
+      (question) => question.reactId === key
+    );
+    if (!question) return;
+
+    question.name = name;
     setQuiz(quizClone);
   }
 
-  function handleCorrectAnswer(key: number, value: string) {
-    const quizClone = { ...quiz };
-    const type = quizClone.questions[key].type;
+  function handleCorrectAnswer(key: string, value: string) {
+    const quizClone = deepCloneQuiz();
+    const question = quizClone.questions.find(
+      (question) => question.reactId === key
+    );
+
+    if (!question) return;
+    const { type } = question;
 
     if (type === 'True-False') {
-      const valueBool = value === 'True';
-      quizClone.questions[key].correctAnswer = valueBool;
-      setQuiz(quizClone);
+      const boolValue = value === 'True'; // Convert input value "String" to boolean
+      question.correctAnswer = boolValue;
     } else if (type === 'Multiple-Choice') {
-      const index = Number(value);
-      (quizClone.questions[key] as MultipleChoiceProps).correctAnswerIndex =
-        index;
-      setQuiz(quizClone);
+      const index = Number(value); // Convert input value "String" to integer
+      (question as MultipleChoiceProps).correctAnswerIndex = index;
     }
+    setQuiz(quizClone);
   }
 
-  function checkCorrectIndex(key: number, index: number) {
-    return (
-      (quiz.questions[key] as MultipleChoiceProps).correctAnswerIndex === index
+  function checkCorrectIndex(key: string, index: number) {
+    const question = quiz.questions.find(
+      (question) => question.reactId === key
     );
+    if (!question) return false;
+
+    return (question as MultipleChoiceProps).correctAnswerIndex === index;
   }
 
   function handleMultipleChoiceAnswer(
-    key: number,
+    key: string,
     index: number,
     value: string
   ) {
-    const quizClone = { ...quiz };
-    (quizClone.questions[key] as MultipleChoiceProps).answers[index] = value;
+    const quizClone = deepCloneQuiz();
+    const question = quizClone.questions.find(
+      (question) => question.reactId === key
+    );
+
+    if (!question) return;
+    (question as MultipleChoiceProps).answers[index] = value;
     setQuiz(quizClone);
   }
 
-  function addQuestion(type: QuestionType) {
-    const quizClone = { ...quiz };
-    const id = quizClone.questions.length
-      ? quizClone.questions[quizClone.questions.length - 1].react_id! + 1
-      : 0;
-    type === QuestionType.TF
-      ? quizClone.questions.push({
-          react_id: id,
+  function addQuestion(type: IQuestion) {
+    const quizClone = deepCloneQuiz();
+    const { questions } = quizClone;
+
+    const newId = uuid();
+    type === IQuestion.TrueFalse
+      ? questions.push({
+          reactId: newId,
           name: '',
           correctAnswer: true,
           type: 'True-False',
         })
-      : quizClone.questions.push({
-          react_id: id,
+      : questions.push({
+          reactId: newId,
           name: '',
           answers: ['', '', '', ''],
           correctAnswer: '',
@@ -94,29 +186,31 @@ const QuizAddForm = () => {
     setQuiz(quizClone);
   }
 
-  function addMultipleChoiceAnswer(key: number) {
-    const quizClone = { ...quiz };
-    (quizClone.questions[key] as MultipleChoiceProps).answers.push('');
-    setQuiz(quizClone);
-  }
+  function editMCAnswersBlock(key: string, type: string) {
+    const quizClone = deepCloneQuiz();
+    const question = quizClone.questions.find(
+      (question) => question.reactId === key
+    ) as MultipleChoiceProps;
 
-  function removeMultipleChoiceAnswer(key: number) {
-    const quizClone = { ...quiz };
-    if ((quizClone.questions[key] as MultipleChoiceProps).answers.length <= 2)
-      return;
-    (quizClone.questions[key] as MultipleChoiceProps).answers.pop();
+    if (!question) return;
 
-    if (
-      (quizClone.questions[key] as MultipleChoiceProps).correctAnswerIndex! >=
-      (quizClone.questions[key] as MultipleChoiceProps).answers.length
-    ) {
-      (quizClone.questions[key] as MultipleChoiceProps).correctAnswerIndex =
-        (quizClone.questions[key] as MultipleChoiceProps).answers.length - 1;
+    const { answers } = question;
+    if (type === 'add') {
+      answers.push('');
+    } else if (type === 'remove') {
+      if (answers.length <= 2) return;
+
+      answers.pop();
+
+      // Shift correctAnswerIndex if correctAnswerIndex is out of bounds
+      if (question.correctAnswerIndex! >= answers.length) {
+        question.correctAnswerIndex = answers.length - 1;
+      }
     }
     setQuiz(quizClone);
   }
 
-  function renderTrueFalseInput(question: TrueFalseProps, key: number) {
+  function renderTrueFalseInput(question: TrueFalseProps, key: string) {
     return (
       <Fragment>
         <h2 className='text-center'>True and False Question</h2>
@@ -161,7 +255,7 @@ const QuizAddForm = () => {
 
   function renderMultipleChoiceInput(
     question: MultipleChoiceProps,
-    key: number
+    key: string
   ) {
     return (
       <Fragment>
@@ -204,13 +298,13 @@ const QuizAddForm = () => {
           <div className='flex gap-2'>
             <input
               type='button'
-              onClick={() => addMultipleChoiceAnswer(key)}
+              onClick={() => editMCAnswersBlock(key, 'add')}
               value='Add'
               className='btn'
             />
             <input
               type='button'
-              onClick={() => removeMultipleChoiceAnswer(key)}
+              onClick={() => editMCAnswersBlock(key, 'remove')}
               value='Remove'
               className='btn'
             />
@@ -245,11 +339,10 @@ const QuizAddForm = () => {
     );
   }
 
-  function deleteQuestion(id: number) {
-    const quizClone = { ...quiz };
-
+  function deleteQuestion(id: string) {
+    const quizClone = deepCloneQuiz();
     quizClone.questions = quizClone.questions.filter(
-      (question) => question.react_id !== id
+      (question) => question.reactId !== id
     );
     setQuiz(quizClone);
   }
@@ -270,18 +363,18 @@ const QuizAddForm = () => {
         {/* Inputs */}
         {quiz.questions.map((question) => {
           return (
-            <div key={question.react_id} className='border rounded-lg p-5 my-2'>
+            <div key={question.reactId} className='border rounded-lg p-5 my-2'>
               <div className='flex justify-end  font-semibold text-2xl'>
                 <span
-                  onClick={() => deleteQuestion(question.react_id!)}
+                  onClick={() => deleteQuestion(question.reactId!)}
                   className='cursor-pointer text-red-500'
                 >
                   X
                 </span>
               </div>
               {question.type === 'True-False'
-                ? renderTrueFalseInput(question, question.react_id!)
-                : renderMultipleChoiceInput(question, question.react_id!)}
+                ? renderTrueFalseInput(question, question.reactId!)
+                : renderMultipleChoiceInput(question, question.reactId!)}
             </div>
           );
         })}
@@ -289,14 +382,14 @@ const QuizAddForm = () => {
         <div className='flex gap-2 mt-4'>
           <button
             type='button'
-            onClick={() => addQuestion(QuestionType.TF)}
+            onClick={() => addQuestion(IQuestion.TrueFalse)}
             className='btn'
           >
             Add True False
           </button>
           <button
             type='button'
-            onClick={() => addQuestion(QuestionType.MC)}
+            onClick={() => addQuestion(IQuestion.MultipleChoice)}
             className='btn'
           >
             Add Multiple Choice
@@ -308,4 +401,4 @@ const QuizAddForm = () => {
   );
 };
 
-export default QuizAddForm;
+export default QuizForm;

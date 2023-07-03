@@ -1,26 +1,11 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import { QuizTableProps } from '../types/index';
-import QuizService from '../services/service.quiz';
 import { Link } from 'react-router-dom';
 
-const QuizzesPage = () => {
-  const [quizzes, setQuizzes] = useState<QuizTableProps[]>([]);
-
-  useEffect(() => {
-    populateQuizzes();
-  }, []);
-
-  async function populateQuizzes() {
-    const { data: quizzes } = await QuizService.getQuizzes();
-    setQuizzes(quizzes);
-  }
-
+const QuizzesPage = ({ quizzes }: { quizzes: QuizTableProps[] }) => {
   return (
     <Fragment>
       <h1 className='text-4xl w-fit mx-auto'>Quizzes</h1>
-      <button className='btn mx-auto mt-4'>
-        <Link to={'/add-quiz'}>Add Quiz</Link>
-      </button>
       <table className='w-full mt-4'>
         <thead className=''>
           <tr className='text-left border-b-2'>
@@ -43,7 +28,14 @@ const QuizzesPage = () => {
                 </Link>
               </td>
               <td className='p-3'>{numQuestions}</td>
-              <td className='p-3'>{owner.username}</td>
+              <td className='p-3'>
+                <Link
+                  to={`/user-profile/${owner._id}`}
+                  className='underline text-blue-600 cursor-pointer hover:text-blue-900'
+                >
+                  {owner.username}
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
