@@ -17,7 +17,7 @@ interface IQuiz {
 }
 
 const QuizSchema = new Schema<IQuiz>({
-  title: { type: String, minlength: 5, maxlength: 25, required: true },
+  title: { type: String, minlength: 1, required: true },
   questions: {
     type: [AbstractQuestionSchema],
     default: undefined,

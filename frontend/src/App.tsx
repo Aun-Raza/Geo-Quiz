@@ -1,13 +1,12 @@
 import { useState, Fragment, useEffect } from 'react';
 import './App.css';
 import Wrapper from './components/Wrapper';
-import { HomePage, QuizzesPage } from './pages';
+import { QuizzesPage } from './pages';
 import NavBar from './components/NavBar';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import QuizRead from './pages/QuizRead';
 import QuizForm from './pages/QuizForm';
-import About from './pages/About';
 import Login from './pages/Login';
 import {
   UserProps,
@@ -20,6 +19,7 @@ import jwtDecode from 'jwt-decode';
 import UserService from './services/service.user';
 import UserProfile from './pages/UserProfile';
 import QuizService from './services/service.quiz';
+import Footer from './components/Footer';
 
 function App() {
   const [user, setUser] = useState<UserProps>();
@@ -85,7 +85,6 @@ function App() {
         <Routes>
           <Route path='/quiz/:id' element={<QuizRead />} />
           <Route path='/quizzes' element={<QuizzesPage quizzes={quizzes} />} />
-          <Route path='/about' element={<About />} />
           <Route
             path='/add-quiz'
             element={
@@ -120,10 +119,11 @@ function App() {
           />
           <Route path='/login' element={<Login loginUser={loginUser} />} />
           <Route path='/not-found' element={<NotFound />} />
-          <Route path='/' element={<HomePage />} />
+          <Route path='/' element={<Navigate replace to='/quizzes' />} />
           <Route path='*' element={<Navigate replace to='/not-found' />} />
         </Routes>
       </Wrapper>
+      <Footer />
     </Fragment>
   );
 }

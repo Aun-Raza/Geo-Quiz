@@ -23,7 +23,7 @@ interface MultipleChoice {
 
 const AbstractQuestionSchema = new Schema<AbstractQuestion>(
   {
-    name: { type: String, minlength: 5, maxlength: 25, required: true },
+    name: { type: String, minlength: 1, required: true },
     type: {
       type: String,
       enum: ['True-False', 'Multiple-Choice'],

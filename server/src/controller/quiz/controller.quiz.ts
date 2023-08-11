@@ -142,9 +142,11 @@ export async function deleteQuiz(req: CustomRequest, res: Response) {
   }
 
   const userDoc = await UserModel.findById(req.user._id);
-  const filter = userDoc.quizzes.filter((quizId: mongoose.Types.ObjectId) => {
-    quizId !== quizDoc._id;
-  });
+  const filter = userDoc.quizzes.filter(
+    (quizId: mongoose.Types.ObjectId) =>
+      quizId.toString() !== quizDoc._id.toString()
+  );
+
   userDoc.quizzes = filter;
   await userDoc.save();
 

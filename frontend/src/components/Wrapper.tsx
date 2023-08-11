@@ -3,7 +3,11 @@ const Wrapper = ({
 }: {
   children: JSX.Element | JSX.Element[] | string;
 }) => {
-  return <div className='container mx-auto mt-4'>{children}</div>;
+  return (
+    <div className='mt-4'>
+      <div className='container mx-auto'>{children}</div>
+    </div>
+  );
 };
 
 export default Wrapper;

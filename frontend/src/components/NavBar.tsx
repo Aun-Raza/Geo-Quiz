@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { NavBarProps } from '../types/type.user';
+import { Fragment } from 'react';
 
 const NavBar = ({ user, setUser }: NavBarProps) => {
   const navigate = useNavigate();
@@ -14,37 +15,45 @@ const NavBar = ({ user, setUser }: NavBarProps) => {
   }
 
   return (
-    <nav className='border-2 px-2 flex justify-between items-center'>
-      <Link to='/'>
-        <img src='/logo.png' className='nav-item' width={50} alt='' />
+    <nav
+      style={{ fontFamily: 'Fira Code, monospace' }}
+      className='shadow-lg p-4 text-lg flex justify-between items-center'
+    >
+      <Link to='/' className='btn_np'>
+        <img src='/assets/js_icon.svg' width={80} alt='' />
       </Link>
       <ul className='flex gap-8 justify-center font-semibold'>
-        <Link to='/' className='nav-item'>
-          Home
+        <Link
+          to='/quizzes'
+          className='btn nav-item  px-4 border-black rounded-lg'
+        >
+          View Quizzes
         </Link>
-        <Link to='/quizzes' className='nav-item'>
-          Quizzes
-        </Link>
-        <Link to='/about' className='nav-item'>
-          About
-        </Link>
+
         {!user ? (
-          <Link to='/login' className='nav-item'>
+          <Link
+            to='/login'
+            className='btn nav-item  px-4 border-black rounded-lg'
+          >
             Login
           </Link>
         ) : (
-          <p onClick={logout} className='nav-item'>
-            Logout
-          </p>
+          <Fragment>
+            <Link
+              className='btn nav-item  px-4 border-black rounded-lg'
+              to={`/user-profile/${user._id}`}
+            >
+              Profile
+            </Link>
+            <p
+              onClick={logout}
+              className='btn nav-item px-4 border-black rounded-lg'
+            >
+              Logout
+            </p>
+          </Fragment>
         )}
       </ul>
-      {user ? (
-        <button className='nav-item btn p-2 border-green-600 text-green-700'>
-          <Link to={`/user-profile/${user?._id}`}>Add Quiz</Link>
-        </button>
-      ) : (
-        <div></div>
-      )}
     </nav>
   );
 };

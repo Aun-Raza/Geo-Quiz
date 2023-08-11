@@ -10,6 +10,7 @@ import { UserProps } from '../types';
 import { useNavigate, useParams } from 'react-router-dom';
 import QuizService from '../services/service.quiz';
 import { v4 as uuid } from 'uuid';
+import validator from '../validation';
 
 const QuizForm = ({
   user,
@@ -26,6 +27,12 @@ const QuizForm = ({
     title: '',
     questions: [],
   });
+
+  type ErrorType = {
+    [key: string | number]: string;
+  };
+
+  const [errors, setErrors] = useState<ErrorType>({});
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -89,16 +96,35 @@ const QuizForm = ({
       }
     });
 
-    console.log(quizClone);
+    const result = validator.validate(quizClone, { abortEarly: false });
 
-    try {
-      if (formType === IForm.Add) {
-        await onCreateQuiz(quizClone);
-      } else if (formType === IForm.Edit) {
-        await onUpdateQuiz(id || '', quizClone);
+    if (result['error']) {
+      const { message } = result.error;
+      const errorMessages = message.replace(/"/g, '').split('.');
+      const errors: ErrorType = {};
+
+      errorMessages.forEach((errorMsg) => {
+        if (errorMsg.includes('title')) {
+          errors['title'] = errorMsg;
+        } else {
+          const match = errorMsg.match(/\d+/) as RegExpMatchArray;
+          const index = parseInt(match[0]);
+          errors[index] = errorMsg;
+        }
+      });
+
+      setErrors(errors);
+    } else {
+      try {
+        console.log(quizClone);
+        if (formType === IForm.Add) {
+          await onCreateQuiz(quizClone);
+        } else if (formType === IForm.Edit) {
+          await onUpdateQuiz(id || '', quizClone);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   }
 
@@ -177,12 +203,13 @@ const QuizForm = ({
       : questions.push({
           reactId: newId,
           name: '',
-          answers: ['', '', '', ''],
+          answers: ['', ''],
           correctAnswer: '',
           correctAnswerIndex: 0,
           type: 'Multiple-Choice',
         });
 
+    setErrors({});
     setQuiz(quizClone);
   }
 
@@ -210,13 +237,19 @@ const QuizForm = ({
     setQuiz(quizClone);
   }
 
-  function renderTrueFalseInput(question: TrueFalseProps, key: string) {
+  function renderTrueFalseInput(
+    question: TrueFalseProps,
+    key: string,
+    index: number
+  ) {
     return (
       <Fragment>
-        <h2 className='text-center'>True and False Question</h2>
+        <h2 className='text-4xl font-mono mt-2'>Question {index + 1}</h2>
         {/* Render Name Change */}
-        <div className='flex mt-4 gap-2'>
-          <label htmlFor={`question${key}_title`}>Name</label>
+        <div className='mt-4'>
+          <label className='input-label' htmlFor={`question${key}_title`}>
+            Name
+          </label>
           <input
             type='text'
             id={`question${key}_title`}
@@ -226,16 +259,19 @@ const QuizForm = ({
           />
         </div>
         {/* Correct Answer */}
-        <h2 className='mt-2 text-center'>Correct Answer</h2>
-        <div className='flex justify-center gap-4'>
+        <h2 className='text-3xl font-mono mt-2'>Correct Answer</h2>
+        <div className='flex gap-4 mb-4 mt-2'>
           {['True', 'False'].map((answer, index) => {
             return (
-              <div className='flex gap-2' key={`${index}${answer}`}>
+              <div
+                className='flex items-center gap-2'
+                key={`${index}${answer}`}
+              >
                 <input
                   type='radio'
                   name={`question${key}_correctAnswer`}
                   id={`question${key}_correctAnswer${answer}`}
-                  className='input-text'
+                  className='input-radio'
                   value={answer}
                   checked={
                     question.correctAnswer.toString() === answer.toLowerCase()
@@ -255,14 +291,17 @@ const QuizForm = ({
 
   function renderMultipleChoiceInput(
     question: MultipleChoiceProps,
-    key: string
+    key: string,
+    index: number
   ) {
     return (
       <Fragment>
-        <h2 className='text-center'>Multiple Choice Question</h2>
+        <h2 className='text-4xl font-mono mt-2'>Question {index + 1}</h2>
         {/* Render Name Change */}
-        <div className='flex mt-4 gap-2'>
-          <label htmlFor={`question${key}_title`}>Name</label>
+        <div className='mt-4'>
+          <label className='input-label' htmlFor={`question${key}_title`}>
+            Name
+          </label>
           <input
             type='text'
             id={`question${key}_title`}
@@ -271,17 +310,17 @@ const QuizForm = ({
             onChange={(e) => handleQuestionName(e.target.value, key)}
           />
         </div>
-        <h2 className='mt-2'>Answers</h2>
+        <h2 className='text-3xl font-mono mt-4'>Answers</h2>
         {/* Answers */}
-        <div className='ps-4 pt-2 flex flex-col gap-2'>
+        <div className='pt-2 flex flex-col gap-2'>
           {question.answers.map((answer, number) => {
             return (
-              <div
-                className='flex gap-2'
-                key={`_id_question${key}_answer${number}`}
-              >
-                <label htmlFor={`question${key}_answer${number}`}>
-                  Answer #{number}
+              <div key={`_id_question${key}_answer${number}`}>
+                <label
+                  className='input-label text-sm font-mono'
+                  htmlFor={`question${key}_answer${number}`}
+                >
+                  Answer {number + 1}
                 </label>
                 <input
                   type='text'
@@ -299,37 +338,37 @@ const QuizForm = ({
             <input
               type='button'
               onClick={() => editMCAnswersBlock(key, 'add')}
-              value='Add'
-              className='btn'
+              value='  +  '
+              className='btn btn_green'
             />
             <input
               type='button'
               onClick={() => editMCAnswersBlock(key, 'remove')}
-              value='Remove'
-              className='btn'
+              value='  -  '
+              className='btn btn_red'
             />
           </div>
         </div>
-        <h2 className='mt-2 text-center'>Correct Answer</h2>
+        <h2 className='text-3xl font-mono mt-4'>Correct Answer</h2>
         {/* Correct Answer */}
-        <div className='flex gap-3 justify-center'>
+        <div className='flex gap-3'>
           {question.answers.map((_, index) => {
             return (
               <div
-                className='flex gap-2 ps-1'
+                className='flex items-center gap-2 ps-1 mt-2 mb-4'
                 key={`_id_question${key}_correctAnswer${index}`}
               >
                 <input
                   type='radio'
                   name={`question${key}_correctAnswer`}
                   id={`question${key}_correctAnswer${index}`}
-                  className='input-text'
+                  className='input-radio'
                   value={index}
                   checked={checkCorrectIndex(key, index)}
                   onChange={(e) => handleCorrectAnswer(key, e.target.value)}
                 />
                 <label htmlFor={`question${key}_correctAnswer${index}`}>
-                  {index}
+                  {index + 1}
                 </label>
               </div>
             );
@@ -344,37 +383,70 @@ const QuizForm = ({
     quizClone.questions = quizClone.questions.filter(
       (question) => question.reactId !== id
     );
+    setErrors({});
     setQuiz(quizClone);
   }
 
   return (
-    <Fragment>
-      <h1 className='text-4xl w-fit mx-auto'>Add New Quiz</h1>
+    <div className='container w-2/3 mx-auto'>
+      <h1 className='heading-1'>
+        {formType === IForm.Add ? 'Add' : 'Edit'} Quiz
+      </h1>
       <form onSubmit={(e) => handleFormSubmit(e)} className='mt-4 p-4'>
-        <div className='flex gap-2'>
-          <label htmlFor='title'>Title</label>
+        <div>
+          <label className='input-label' htmlFor='title'>
+            Title
+          </label>
           <input
             type='text'
             value={quiz.title}
             onChange={(e) => handleQuizTitle(e.target.value)}
             className='input-text'
           />
+          {errors['title'] && (
+            <div className='text-sm mt-1 text-red-500'>{errors['title']}</div>
+          )}
+        </div>
+        <div>
+          <label className='input-label mt-4' htmlFor='description'>
+            Description
+          </label>
+          <textarea
+            className='input-text'
+            rows={3}
+            // value={quiz.title}
+            // onChange={(e) => handleQuizTitle(e.target.value)}
+          />
+          {errors['description'] && (
+            <div className='text-sm mt-1 text-red-500'>
+              {errors['description']}
+            </div>
+          )}
         </div>
         {/* Inputs */}
-        {quiz.questions.map((question) => {
+        {quiz.questions.map((question, index) => {
           return (
-            <div key={question.reactId} className='border rounded-lg p-5 my-2'>
-              <div className='flex justify-end  font-semibold text-2xl'>
-                <span
-                  onClick={() => deleteQuestion(question.reactId!)}
-                  className='cursor-pointer text-red-500'
-                >
-                  X
-                </span>
+            <div
+              key={question.reactId}
+              className='border rounded-lg ps-4 pe-3 relative my-6 bg-slate-100'
+            >
+              <div
+                className='absolute top-1 right-2'
+                onClick={() => deleteQuestion(question.reactId!)}
+              >
+                <button className='btn  flex items-center'>
+                  <img className='w-6 h-6' src='/assets/remove_icon.svg' />
+                  Remove
+                </button>
               </div>
               {question.type === 'True-False'
-                ? renderTrueFalseInput(question, question.reactId!)
-                : renderMultipleChoiceInput(question, question.reactId!)}
+                ? renderTrueFalseInput(question, question.reactId!, index)
+                : renderMultipleChoiceInput(question, question.reactId!, index)}
+              {errors[index] && (
+                <div className='text-sm mb-2 text-red-500'>
+                  Please fill all the empty fields
+                </div>
+              )}
             </div>
           );
         })}
@@ -383,21 +455,23 @@ const QuizForm = ({
           <button
             type='button'
             onClick={() => addQuestion(IQuestion.TrueFalse)}
-            className='btn'
+            className='btn btn_green'
           >
-            Add True False
+            + True False
           </button>
           <button
             type='button'
             onClick={() => addQuestion(IQuestion.MultipleChoice)}
-            className='btn'
+            className='btn btn_purple'
           >
-            Add Multiple Choice
+            + Multiple Choice
           </button>
         </div>
-        <button className='btn mt-4 mx-auto'>Submit</button>
+        <button type='submit' className='btn btn_blue mt-4 mx-auto'>
+          Submit
+        </button>
       </form>
-    </Fragment>
+    </div>
   );
 };
 

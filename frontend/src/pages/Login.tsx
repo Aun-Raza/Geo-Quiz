@@ -44,20 +44,20 @@ const Login = ({ loginUser }: LoginFormProps) => {
 
   return (
     <div>
-      <h1 className='text-4xl w-fit mx-auto'>Login</h1>
+      <h1 className='heading-1'>Login</h1>
       <form
         onSubmit={(e) => handleFormSubmit(e)}
-        className='bg-white mt-4 shadow-md border rounded px-8 pt-6 pb-8 mb-4'
+        className='bg-white mt-4 w-2/3 mx-auto shadow-md border rounded px-8 pt-6 pb-8 mb-4'
       >
-        <div className='mb-4'>
+        <div className='mt-2 mb-4 relative z-0 group'>
           <label
-            className='block text-gray-700 text-sm font-bold mb-2'
+            className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
             htmlFor='username'
           >
             Username
           </label>
           <input
-            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
             id='username'
             type='text'
             name='username'
@@ -66,30 +66,32 @@ const Login = ({ loginUser }: LoginFormProps) => {
             onChange={(e) => handleUserChange(e)}
           />
         </div>
-        <div className='mb-6'>
+        <div className='mt-8 relative z-0 group'>
           <label
-            className='block text-gray-700 text-sm font-bold mb-2'
+            className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
             htmlFor='password'
           >
             Password
           </label>
           <input
-            className='shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline'
+            className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
             id='password'
             type='password'
             name='password'
-            placeholder='******************'
+            placeholder='Password'
             value={formUser.password}
             onChange={(e) => handleUserChange(e)}
           />
-          <p className='text-red-500 text-xs italic'>
-            Please choose a password.
-          </p>
         </div>
-        {errorMsg && <div className='border p-3 m-3'>{errorMsg}</div>}
-        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
-          Login
-        </button>
+        {errorMsg && (
+          <div className='mt-1 mb-4 text-red-600 text-lg'>{errorMsg}</div>
+        )}
+        <div className='my-4 text-sm font-mono'>
+          <h2 className='text-lg font-semibold'>Demo Account</h2>
+          <p>Username: john_doe</p>
+          <p>Password: 12345</p>
+        </div>
+        <button className='btn btn_blue mt-2'>Login</button>
       </form>
     </div>
   );
