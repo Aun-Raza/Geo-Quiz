@@ -7,11 +7,6 @@ class QuizService {
   });
 
   async getQuizzes() {
-    try {
-      console.log(process);
-    } catch (error) {
-      console.log(error);
-    }
     const response = await this.http.get<QuizTableProps[]>('/api/getQuizzes');
     return response;
   }
