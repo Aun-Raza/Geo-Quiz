@@ -1,15 +1,16 @@
 import app from '../../../app';
-import config from 'config';
 import mongoose, { ObjectId } from 'mongoose';
 import request from 'supertest';
 import { User, IUser } from '../user/User';
 import { Quiz } from './Quiz';
 import { QuizModel } from '../../model/quiz/model.quiz';
 import { UserModel } from '../../model/user/model.user';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Basic App & DB Setup
 beforeAll(async () => {
-  await mongoose.connect(config.get('DB_URI'));
+  await mongoose.connect(process.env.DB_URI);
 });
 
 afterAll(async () => {
@@ -103,9 +104,7 @@ describe('POST /api/createQuiz - True & False', () => {
       expect.arrayContaining(['title', 'questions'])
     );
     expect(body.questions).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ type: 'True-False' }),
-      ])
+      expect.arrayContaining([expect.objectContaining({ type: 'True-False' })])
     );
 
     await validateDB(body._id);

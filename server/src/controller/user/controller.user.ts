@@ -1,6 +1,5 @@
 /* eslint-disable linebreak-style */
 import bcrypt from 'bcrypt';
-import config from 'config';
 import jwt from 'jsonwebtoken';
 import log from '../../log/logger';
 import { ObjectId } from 'mongoose';
@@ -9,6 +8,8 @@ import { Request, Response } from 'express';
 import { UserModel } from '../../model/user/model.user';
 import Joi from '../../model/user/joi-validator.user';
 import _ from 'lodash';
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface CustomRequest extends Request {
   user: { _id: ObjectId; username: string };
@@ -26,7 +27,7 @@ export async function getUsers(req: Request, res: Response) {
   }
 
   const docSelectedProperties = userDocs.map((userDoc) =>
-    _.pick(userDoc, ['_id', 'username', 'email', 'quizzes'])
+    _.pick(userDoc, ['_id', 'username', 'quizzes'])
   );
 
   res.json(docSelectedProperties);
@@ -41,7 +42,7 @@ export async function getUser(req: Request, res: Response) {
     throw new Error(`UserId: ${userDoc._id} does not exist.`);
   }
 
-  res.json(_.pick(userDoc, ['_id', 'username', 'email', 'quizzes']));
+  res.json(_.pick(userDoc, ['_id', 'username', 'quizzes']));
 }
 
 /* POST METHOD(s)
@@ -72,15 +73,14 @@ export async function registerUser(req: Request, res: Response) {
   const payload = {
     _id: userDoc._id,
     username: userDoc.username,
-    email: userDoc.email,
   };
-  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
+  const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY);
 
   res
     .header('x-auth-token', token)
     .header('access-control-expose-headers', 'x-auth-token')
     .status(201)
-    .json(_.pick(userDoc, ['_id', 'username', 'email', 'quizzes']));
+    .json(_.pick(userDoc, ['_id', 'username', 'quizzes']));
 }
 
 export async function loginUser(req: Request, res: Response) {
@@ -102,9 +102,8 @@ export async function loginUser(req: Request, res: Response) {
   const payload = {
     _id: userDoc._id,
     username: userDoc.username,
-    email: userDoc.email,
   };
-  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
+  const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY);
 
   res
     .header('x-auth-token', token)
@@ -143,15 +142,14 @@ export async function updateUser(req: CustomRequest, res: Response) {
   const payload = {
     _id: userDoc._id,
     username: userDoc.username,
-    email: userDoc.email,
   };
-  const token = jwt.sign(payload, config.get('JWT_PRIVATE_KEY'));
+  const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY);
 
   res
     .header('x-auth-token', token)
     .header('access-control-expose-headers', 'x-auth-token')
     .status(201)
-    .json(_.pick(userDoc, ['_id', 'username', 'email', 'quizzes']));
+    .json(_.pick(userDoc, ['_id', 'username', 'quizzes']));
 }
 
 export async function deleteUser(req: CustomRequest, res: Response) {
@@ -174,7 +172,5 @@ export async function deleteUser(req: CustomRequest, res: Response) {
   });
   await UserModel.deleteOne({ userDoc });
 
-  res
-    .status(201)
-    .json(_.pick(userDoc, ['_id', 'username', 'email', 'quizzes']));
+  res.status(201).json(_.pick(userDoc, ['_id', 'username', 'quizzes']));
 }

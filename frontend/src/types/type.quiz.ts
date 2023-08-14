@@ -1,5 +1,6 @@
 interface QuizPropsAbstract {
   title: string;
+  description: string;
   owner?: { username: string; _id: string };
 }
 

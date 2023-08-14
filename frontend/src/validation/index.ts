@@ -15,6 +15,7 @@ const tFValidator = Joi.object({
 
 const validator = Joi.object({
   title: Joi.string().min(5).max(25).required(),
+  description: Joi.string().min(5).max(50).required(),
   questions: Joi.array().items(mCValidator, tFValidator).min(1).required(),
 });
 

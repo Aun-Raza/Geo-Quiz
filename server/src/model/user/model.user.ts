@@ -3,7 +3,6 @@ import mongoose, { Schema, model, ObjectId } from 'mongoose';
 
 interface IUser {
   _id: ObjectId;
-  email: string;
   username: string;
   hash: string;
   quizzes: mongoose.Types.ObjectId[];
@@ -11,11 +10,6 @@ interface IUser {
 
 const UserSchema = new Schema<IUser>(
   {
-    email: {
-      type: String,
-      minlength: 5,
-      required: true,
-    },
     username: {
       type: String,
       minlength: 5,

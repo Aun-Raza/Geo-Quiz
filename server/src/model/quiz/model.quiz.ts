@@ -23,6 +23,7 @@ const QuizSchema = new Schema<IQuiz>({
     default: undefined,
     required: true,
   },
+  description: { type: String, minlength: 1, required: true },
   owner: {
     type: mongoose.Types.ObjectId,
     ref: 'User',

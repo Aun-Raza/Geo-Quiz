@@ -3,10 +3,15 @@ import { QuizTableProps, QuizProps, QuizAddProps } from '../types';
 
 class QuizService {
   http = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: import.meta.env.VITE_API_URL,
   });
 
   async getQuizzes() {
+    try {
+      console.log(process);
+    } catch (error) {
+      console.log(error);
+    }
     const response = await this.http.get<QuizTableProps[]>('/api/getQuizzes');
     return response;
   }

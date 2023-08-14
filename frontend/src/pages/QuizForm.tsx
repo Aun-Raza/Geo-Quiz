@@ -25,6 +25,7 @@ const QuizForm = ({
 }) => {
   const [quiz, setQuiz] = useState<QuizAddProps>({
     title: '',
+    description: '',
     questions: [],
   });
 
@@ -106,6 +107,8 @@ const QuizForm = ({
       errorMessages.forEach((errorMsg) => {
         if (errorMsg.includes('title')) {
           errors['title'] = errorMsg;
+        } else if (errorMsg.includes('description')) {
+          errors['description'] = errorMsg;
         } else {
           const match = errorMsg.match(/\d+/) as RegExpMatchArray;
           const index = parseInt(match[0]);
@@ -131,6 +134,12 @@ const QuizForm = ({
   function handleQuizTitle(title: string) {
     const quizClone = deepCloneQuiz();
     quizClone.title = title;
+    setQuiz(quizClone);
+  }
+
+  function handleQuizDescription(desc: string) {
+    const quizClone = deepCloneQuiz();
+    quizClone.description = desc;
     setQuiz(quizClone);
   }
 
@@ -414,8 +423,8 @@ const QuizForm = ({
           <textarea
             className='input-text'
             rows={3}
-            // value={quiz.title}
-            // onChange={(e) => handleQuizTitle(e.target.value)}
+            value={quiz.description}
+            onChange={(e) => handleQuizDescription(e.target.value)}
           />
           {errors['description'] && (
             <div className='text-sm mt-1 text-red-500'>

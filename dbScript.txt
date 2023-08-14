@@ -2,27 +2,178 @@
 
 --------- User ---------
 
-[{"_id": ObjectId('62f7ecdd9d4ebd2c0173f99c'),"username": "john_doe","email": "johnDoe@gmail.com","quizzes": ["62f7ed059d4ebd2c0173f99f","62f7ed189d4ebd2c0173f9a6",],"hash": "$2b$10$SYl3mxh66OsHsp.gHC/5..c/X.VwfikvneqRimktRG4km.IhoFBNO"},
-{"_id": ObjectId('62f7ed7c9d4ebd2c0173f9ae'),"username": "jane_doe","email": "janeDoe@gmail.com","quizzes": ["62f7ee179d4ebd2c0173f9b0","62f7ee369d4ebd2c0173f9b6"],"hash": "$2b$10$9A0znQkI4wIsPMA774hx9OXtMeHSec4KgMbtAq0PCIJ3chAZ/grJO"},
-{"_id": ObjectId('62f7eeeb9d4ebd2c0173f9bd'),"username": "bob-jones","email": "bobbyJones@hotmail.com","quizzes": ["62f7ef149d4ebd2c0173f9bf","62f7ef159d4ebd2c0173f9c4","62f7ef349d4ebd2c0173f9c9"],"hash": "$2b$10$t4Z4I.fr/vKgMtAXUmmd/eB1PPedAfnJJdH/.0Vt4imLpfnZTTiOu"}]
+[{"_id": ObjectId('62f7ecdd9d4ebd2c0173f99c'),"username": "john_doe", "quizzes": ["62f7ed059d4ebd2c0173f99f","62f7ed189d4ebd2c0173f9a6",],"hash": "$2b$10$SYl3mxh66OsHsp.gHC/5..c/X.VwfikvneqRimktRG4km.IhoFBNO"},
+{"_id": ObjectId('62f7ed7c9d4ebd2c0173f9ae'),"username": "jane_doe", "quizzes": ["62f7ee179d4ebd2c0173f9b0","62f7ee369d4ebd2c0173f9b6"],"hash": "$2b$10$9A0znQkI4wIsPMA774hx9OXtMeHSec4KgMbtAq0PCIJ3chAZ/grJO"},
+{"_id": ObjectId('62f7eeeb9d4ebd2c0173f9bd'),"username": "bob_jones", "quizzes": ["62f7ef149d4ebd2c0173f9bf","62f7ef159d4ebd2c0173f9c4","62f7ef349d4ebd2c0173f9c9"],"hash": "$2b$10$t4Z4I.fr/vKgMtAXUmmd/eB1PPedAfnJJdH/.0Vt4imLpfnZTTiOu"}]
 
 --------- Quizzes ---------
 
-[{"_id": ObjectId('62f7ed059d4ebd2c0173f99f'),"title": "Mother Earth","questions": [{"correctAnswer": false,"_id": ObjectId('62f7ed059d4ebd2c0173f9a0'),"name": "The Earth is flat, period.","type": "True-False"},{"correctAnswer": true,"_id": ObjectId('62f7ed059d4ebd2c0173f9a1'),
-"name": "The sun is larger than the Earth.","type": "True-False"},{"correctAnswer": false,"_id": ObjectId('62f7ed059d4ebd2c0173f9a2'),"name": "Earth is controlled by reptiles.","type": "True-False"}],"owner": "62f7ecdd9d4ebd2c0173f99c",},{"_id": ObjectId('62f7ed189d4ebd2c0173f9a6'),
-"title": "USA!","questions": [{"correctAnswer": false,"_id": ObjectId('62f7ed189d4ebd2c0173f9a7'),"name": "The United States is composed of 51 states.","type": "True-False"},{"correctAnswer": false,"_id": ObjectId('62f7ed189d4ebd2c0173f9a8'),
-"name": "Canada has been part of the USA since The War of 1812.","type": "True-False"}],"owner": "62f7ecdd9d4ebd2c0173f99c",},{"_id": ObjectId('62f7ee179d4ebd2c0173f9b0'),"title": "Panama Canal","questions": [{"correctAnswer": true,"_id": ObjectId('62f7ee179d4ebd2c0173f9b1'),
-"name": "The Panama Canal is the intermediary between the Atlantic and Pacific oceans.","type": "True-False"},{"answers": ["France","UK","USA","Panama","Japan"],"correctAnswer": "USA","_id": ObjectId('62f7ee179d4ebd2c0173f9b2'),
-"name": "Who finished constructing the Panama Canal?","type": "Multiple-Choice"}],"owner": "62f7ed7c9d4ebd2c0173f9ae",},{"_id": ObjectId('62f7ee369d4ebd2c0173f9b6'),"title": "Continental","questions": [{"answers": ["Eurasia","Russia","North America","Asia"],"correctAnswer": "Asia",
-"_id": ObjectId('62f7ee369d4ebd2c0173f9b7'),"name": "What is the biggest continent in the world?","type": "Multiple-Choice"}],"owner": "62f7ed7c9d4ebd2c0173f9ae",},
-{"_id": ObjectId('62f7ef149d4ebd2c0173f9bf'),"title": "Earth Timezones","questions": [{"answers": ["24","50","100","1"],"correctAnswer": "24","_id": ObjectId('62f7ef149d4ebd2c0173f9c0'),"name": "How many timezones does Earth have","type": "Multiple-Choice"}],"owner": "62f7eeeb9d4ebd2c0173f9bd",
-},{"_id": ObjectId('62f7ef159d4ebd2c0173f9c4'),"title": "Africa","questions": [{"answers": ["Egypt","South Africa","Mozambique","Trinidad and Tobago"],"correctAnswer": "Trinidad and Tobago","_id": ObjectId('62f7ef159d4ebd2c0173f9c5'),"name": "Which country is not a part of Africa?",
-"type": "Multiple-Choice"}],"owner": "62f7eeeb9d4ebd2c0173f9bd",},{"_id": ObjectId('62f7ef349d4ebd2c0173f9c9'),"title": "Eurasia","questions": [{"answers": ["Europe","Asia","Antarctica","Europe and Asia"],"correctAnswer": "Europe and Asia","_id": ObjectId('62f7ef349d4ebd2c0173f9ca'),
-"name": "Which continent Russia belongs to?","type": "Multiple-Choice"},{"answers": ["Lake Superior","Lake Michigan","Lake Ontario","Lake Erie"],"correctAnswer": "Lake Superior","_id": ObjectId('62f7ef349d4ebd2c0173f9cb'),"name": "Which of the lake is the most superior in size?",
-"type": "Multiple-Choice"},{"answers": ["7900 million","5.2 billion","500 million","6 billion"],"correctAnswer": "7900 million","_id": ObjectId('62f7ef349d4ebd2c0173f9cc'),"name": "What is the world population?","type": "Multiple-Choice"}],"owner": "62f7eeeb9d4ebd2c0173f9bd",}]
+[
+  {
+    "_id": "62f7ed059d4ebd2c0173f99f",
+    "title": "JavaScript Basics",
+    "questions": [
+      {
+        "correctAnswer": "false",
+        "_id": "62f7ed059d4ebd2c0173f9a0",
+        "name": "JavaScript is the same as Java.",
+        "type": "True-False"
+      },
+      {
+        "correctAnswer": "var, let, const",
+        "_id": "62f7ed059d4ebd2c0173f9a1",
+        "name": "Which of the following are ways to declare a variable in JavaScript?",
+        "type": "Multiple-Choice",
+        "answers": ["var", "let", "const", "varlet"]
+      }
+    ],
+    "owner": "62f7ecdd9d4ebd2c0173f99c"
+  },
+  {
+    "_id": "62f7ed189d4ebd2c0173f9a6",
+    "title": "React Fundamentals",
+    "questions": [
+      {
+        "correctAnswer": "true",
+        "_id": "62f7ed189d4ebd2c0173f9a7",
+        "name": "In React, state is mutable.",
+        "type": "True-False"
+      },
+      {
+        "correctAnswer": "JSX",
+        "_id": "62f7ed189d4ebd2c0173f9a8",
+        "name": "React uses ______ to describe the UI.",
+        "type": "Multiple-Choice",
+        "answers": ["HTML", "XML", "JSX", "JSON"]
+      }
+    ],
+    "owner": "62f7ed7c9d4ebd2c0173f9ae"
+  },
+  {
+    "_id": "62f7ee179d4ebd2c0173f9b0",
+    "title": "Angular Introduction",
+    "questions": [
+      {
+        "correctAnswer": "Component-based architecture",
+        "_id": "62f7ee179d4ebd2c0173f9b1",
+        "name": "What architecture does Angular use?",
+        "type": "Multiple-Choice",
+        "answers": ["MVC", "Server-client", "Component-based architecture", "Module pattern"]
+      },
+      {
+        "correctAnswer": "true",
+        "_id": "62f7ee179d4ebd2c0173f9b2",
+        "name": "Angular is a frontend framework.",
+        "type": "True-False"
+      }
+    ],
+    "owner": "62f7ed7c9d4ebd2c0173f9ae"
+  },
+  {
+    "_id": "62f7ee369d4ebd2c0173f9b6",
+    "title": "Vue.js Essentials",
+    "questions": [
+      {
+        "correctAnswer": "true",
+        "_id": "62f7ee369d4ebd2c0173f9b7",
+        "name": "Vue.js offers reactivity out of the box.",
+        "type": "True-False"
+      },
+      {
+        "correctAnswer": "Virtual DOM",
+        "_id": "62f7ee369d4ebd2c0173f9b8",
+        "name": "Vue uses ______ to optimize UI updates.",
+        "type": "Multiple-Choice",
+        "answers": ["Real DOM", "Shadow DOM", "Virtual DOM", "Light DOM"]
+      }
+    ],
+    "owner": "62f7ecdd9d4ebd2c0173f99c"
+  },
+  {
+    "_id": "62f7ef149d4ebd2c0173f9bf",
+    "title": "Node.js Overview",
+    "questions": [
+      {
+        "correctAnswer": "false",
+        "_id": "62f7ef149d4ebd2c0173f9c0",
+        "name": "Node.js is primarily used for frontend development.",
+        "type": "True-False"
+      },
+      {
+        "correctAnswer": "Event-driven",
+        "_id": "62f7ef149d4ebd2c0173f9c1",
+        "name": "Node.js is ______.",
+        "type": "Multiple-Choice",
+        "answers": ["Multi-threaded", "Single-threaded", "Event-driven", "Both Single-threaded and Event-driven"]
+      }
+    ],
+    "owner": "62f7eeeb9d4ebd2c0173f9bd"
+  },
+  {
+    "_id": "62f7ef159d4ebd2c0173f9c4",
+    "title": "Express.js Features",
+    "questions": [
+      {
+        "correctAnswer": "true",
+        "_id": "62f7ef159d4ebd2c0173f9c5",
+        "name": "Express.js is a minimalist web application framework for Node.js.",
+        "type": "True-False"
+      },
+      {
+        "correctAnswer": "Middleware",
+        "_id": "62f7ef159d4ebd2c0173f9c6",
+        "name": "In Express.js, functions that can execute any code, make changes to the request and response objects, or end the request-response cycle are called _____.",
+        "type": "Multiple-Choice",
+        "answers": ["Endpoints", "Routers", "Handlers", "Middleware"]
+      }
+    ],
+    "owner": "62f7eeeb9d4ebd2c0173f9bd"
+  },
+  {
+    "_id": "62f7ef349d4ebd2c0173f9c9",
+    "title": "Webpack Essentials",
+    "questions": [
+      {
+        "correctAnswer": "true",
+        "_id": "62f7ef349d4ebd2c0173f9ca",
+        "name": "Webpack can be used to bundle JavaScript files for usage in a browser.",
+        "type": "True-False"
+      },
+      {
+        "correctAnswer": "Loader",
+        "_id": "62f7ef349d4ebd2c0173f9cb",
+        "name": "In Webpack, what helps to transform and preprocess files?",
+        "type": "Multiple-Choice",
+        "answers": ["Plugin", "Transformer", "Loader", "Compiler"]
+      }
+    ],
+    "owner": "62f7ecdd9d4ebd2c0173f99c"
+  },
+  {
+    "_id": "62f7ef459d4ebd2c0173f9cd",
+    "title": "CSS Frameworks",
+    "questions": [
+      {
+        "correctAnswer": "Bootstrap",
+        "_id": "62f7ef459d4ebd2c0173f9ce",
+        "name": "Which of the following is a popular CSS framework?",
+        "type": "Multiple-Choice",
+        "answers": ["Bootstrap", "Express.js", "Webpack", "Node.js"]
+      },
+      {
+        "correctAnswer": "false",
+        "_id": "62f7ef459d4ebd2c0173f9cf",
+        "name": "All CSS frameworks require JavaScript to style components.",
+        "type": "True-False"
+      }
+    ],
+    "owner": "62f7ed7c9d4ebd2c0173f9ae"
+  }
+]
+
+
 
 --------- Command ---------
 
 db.users.insertMany([{"_id": ObjectId('62f7ecdd9d4ebd2c0173f99c'),"username": "john_doe","email": "johnDoe@gmail.com","quizzes": ["62f7ed059d4ebd2c0173f99f","62f7ed189d4ebd2c0173f9a6",],"hash": "$2b$10$SYl3mxh66OsHsp.gHC/5..c/X.VwfikvneqRimktRG4km.IhoFBNO"},{"_id": ObjectId('62f7ed7c9d4ebd2c0173f9ae'),"username": "jane_doe","email": "janeDoe@gmail.com","quizzes": ["62f7ee179d4ebd2c0173f9b0","62f7ee369d4ebd2c0173f9b6"],"hash": "$2b$10$9A0znQkI4wIsPMA774hx9OXtMeHSec4KgMbtAq0PCIJ3chAZ/grJO"},{"_id": ObjectId('62f7eeeb9d4ebd2c0173f9bd'),"username": "bob-jones","email": "bobbyJones@hotmail.com","quizzes": ["62f7ef149d4ebd2c0173f9bf","62f7ef159d4ebd2c0173f9c4","62f7ef349d4ebd2c0173f9c9"],"hash": "$2b$10$t4Z4I.fr/vKgMtAXUmmd/eB1PPedAfnJJdH/.0Vt4imLpfnZTTiOu"}])
-
-db.quizzes.insertMany([{"_id": ObjectId('62f7ed059d4ebd2c0173f99f'),"title": "Mother Earth","questions": [{"correctAnswer": false,"_id": ObjectId('62f7ed059d4ebd2c0173f9a0'),"name": "The Earth is flat, period.","type": "True-False"},{"correctAnswer": true,"_id": ObjectId('62f7ed059d4ebd2c0173f9a1'),"name": "The sun is larger than the Earth.","type": "True-False"},{"correctAnswer": false,"_id": ObjectId('62f7ed059d4ebd2c0173f9a2'),"name": "Earth is controlled by reptiles.","type": "True-False"}],"owner": "62f7ecdd9d4ebd2c0173f99c",},{"_id": ObjectId('62f7ed189d4ebd2c0173f9a6'),"title": "USA!","questions": [{"correctAnswer": false,"_id": ObjectId('62f7ed189d4ebd2c0173f9a7'),"name": "The United States is composed of 51 states.","type": "True-False"},{"correctAnswer": false,"_id": ObjectId('62f7ed189d4ebd2c0173f9a8'),"name": "Canada has been part of the USA since The War of 1812.","type": "True-False"}],"owner": "62f7ecdd9d4ebd2c0173f99c",},{"_id": ObjectId('62f7ee179d4ebd2c0173f9b0'),"title": "Panama Canal","questions": [{"correctAnswer": true,"_id": ObjectId('62f7ee179d4ebd2c0173f9b1'),"name": "The Panama Canal is the intermediary between the Atlantic and Pacific oceans.","type": "True-False"},{"answers": ["France","UK","USA","Panama","Japan"],"correctAnswer": "USA","_id": ObjectId('62f7ee179d4ebd2c0173f9b2'),"name": "Who finished constructing the Panama Canal?","type": "Multiple-Choice"}],"owner": "62f7ed7c9d4ebd2c0173f9ae",},{"_id": ObjectId('62f7ee369d4ebd2c0173f9b6'),"title": "Continental","questions": [{"answers": ["Eurasia","Russia","North America","Asia"],"correctAnswer": "Asia","_id": ObjectId('62f7ee369d4ebd2c0173f9b7'),"name": "What is the biggest continent in the world?","type": "Multiple-Choice"}],"owner": "62f7ed7c9d4ebd2c0173f9ae",},{"_id": ObjectId('62f7ef149d4ebd2c0173f9bf'),"title": "Earth Timezones","questions": [{"answers": ["24","50","100","1"],"correctAnswer": "24","_id": ObjectId('62f7ef149d4ebd2c0173f9c0'),"name": "How many timezones does Earth have","type": "Multiple-Choice"}],"owner": "62f7eeeb9d4ebd2c0173f9bd",},{"_id": ObjectId('62f7ef159d4ebd2c0173f9c4'),"title": "Africa","questions": [{"answers": ["Egypt","South Africa","Mozambique","Trinidad and Tobago"],"correctAnswer": "Trinidad and Tobago","_id": ObjectId('62f7ef159d4ebd2c0173f9c5'),"name": "Which country is not a part of Africa?","type": "Multiple-Choice"}],"owner": "62f7eeeb9d4ebd2c0173f9bd",},{"_id": ObjectId('62f7ef349d4ebd2c0173f9c9'),"title": "Eurasia","questions": [{"answers": ["Europe","Asia","Antarctica","Europe and Asia"],"correctAnswer": "Europe and Asia","_id": ObjectId('62f7ef349d4ebd2c0173f9ca'),"name": "Which continent Russia belongs to?","type": "Multiple-Choice"},{"answers": ["Lake Superior","Lake Michigan","Lake Ontario","Lake Erie"],"correctAnswer": "Lake Superior","_id": ObjectId('62f7ef349d4ebd2c0173f9cb'),"name": "Which of the lake is the most superior in size?","type": "Multiple-Choice"},{"answers": ["7900 million","5.2 billion","500 million","6 billion"],"correctAnswer": "7900 million","_id": ObjectId('62f7ef349d4ebd2c0173f9cc'),"name": "What is the world population?","type": "Multiple-Choice"}],"owner": "62f7eeeb9d4ebd2c0173f9bd",}])
+db.quizzes.insertMany([{"_id": "62f7ed059d4ebd2c0173f99f","title": "JavaScript Basics","description": "An introduction to the basics of JavaScript.","questions": [{"correctAnswer": "false","_id": "62f7ed059d4ebd2c0173f9a0","name": "JavaScript is the same as Java.","type": "True-False"},{"correctAnswer": "var, let, const","_id": "62f7ed059d4ebd2c0173f9a1","name": "Which of the following are ways to declare a variable in JavaScript?","type": "Multiple-Choice","answers": ["var", "let", "const", "varlet"]}],"owner": "62f7ecdd9d4ebd2c0173f99c"},{"_id": "62f7ed189d4ebd2c0173f9a6","title": "React Fundamentals","description": "Core concepts of React.js.","questions": [{"correctAnswer": "true","_id": "62f7ed189d4ebd2c0173f9a7","name": "In React, state is mutable.","type": "True-False"},{"correctAnswer": "JSX","_id": "62f7ed189d4ebd2c0173f9a8","name": "React uses ______ to describe the UI.","type": "Multiple-Choice","answers": ["HTML", "XML", "JSX", "JSON"]}],"owner": "62f7ed7c9d4ebd2c0173f9ae"},{"_id": "62f7ee179d4ebd2c0173f9b0","title": "Angular Introduction","description": "Dive into the world of Angular.","questions": [{"correctAnswer": "Component-based architecture","_id": "62f7ee179d4ebd2c0173f9b1","name": "What architecture does Angular use?","type": "Multiple-Choice","answers": ["MVC", "Server-client", "Component-based architecture", "Module pattern"]},{"correctAnswer": "true","_id": "62f7ee179d4ebd2c0173f9b2","name": "Angular is a frontend framework.","type": "True-False"}],"owner": "62f7ed7c9d4ebd2c0173f9ae"},{"_id": "62f7ee369d4ebd2c0173f9b6","title": "Vue.js Essentials","description": "Fundamentals of Vue.js.","questions": [{"correctAnswer": "true","_id": "62f7ee369d4ebd2c0173f9b7","name": "Vue.js offers reactivity out of the box.","type": "True-False"},{"correctAnswer": "Virtual DOM","_id": "62f7ee369d4ebd2c0173f9b8","name": "Vue uses ______ to optimize UI updates.","type": "Multiple-Choice","answers": ["Real DOM", "Shadow DOM", "Virtual DOM", "Light DOM"]}],"owner": "62f7ecdd9d4ebd2c0173f99c"},{"_id": "62f7ef149d4ebd2c0173f9bf","title": "Node.js Overview","description": "A brief overview of Node.js.","questions": [{"correctAnswer": "false","_id": "62f7ef149d4ebd2c0173f9c0","name": "Node.js is primarily used for frontend development.","type": "True-False"},{"correctAnswer": "Event-driven","_id": "62f7ef149d4ebd2c0173f9c1","name": "Node.js is ______.","type": "Multiple-Choice","answers": ["Multi-threaded", "Single-threaded", "Event-driven", "Both Single-threaded and Event-driven"]}],"owner": "62f7eeeb9d4ebd2c0173f9bd"},{"_id": "62f7ef159d4ebd2c0173f9c4","title": "Express.js Features","description": "Key features of Express.js.","questions": [{"correctAnswer": "true","_id": "62f7ef159d4ebd2c0173f9c5","name": "Express.js is a minimalist web application framework for Node.js.","type": "True-False"},{"correctAnswer": "Middleware","_id": "62f7ef159d4ebd2c0173f9c6","name": "In Express.js, functions that can execute any code, make changes to the request and response objects, or end the request-response cycle are called _____.","type": "Multiple-Choice","answers": ["Endpoints", "Routers", "Handlers", "Middleware"]}],"owner": "62f7eeeb9d4ebd2c0173f9bd"},{"_id": "62f7ef349d4ebd2c0173f9c9","title": "Webpack Essentials","description": "Understand the core concepts of Webpack.","questions": [{"correctAnswer": "true","_id": "62f7ef349d4ebd2c0173f9ca","name": "Webpack can be used to bundle JavaScript filesfor usage in a browser.","type": "True-False"},{"correctAnswer": "Loader","_id": "62f7ef349d4ebd2c0173f9cb","name": "In Webpack, what helps to transform and preprocess files?","type": "Multiple-Choice","answers": ["Plugin", "Transformer", "Loader", "Compiler"]}],"owner": "62f7ecdd9d4ebd2c0173f99c"},{"_id": "62f7ef459d4ebd2c0173f9cd","title": "CSS Frameworks","description": "Introduction to popular CSS frameworks.","questions": [{"correctAnswer": "Bootstrap","_id": "62f7ef459d4ebd2c0173f9ce","name": "Which of the following is a popular CSS framework?","type": "Multiple-Choice","answers": ["Bootstrap", "Express.js", "Webpack", "Node.js"]},{"correctAnswer": "false","_id": "62f7ef459d4ebd2c0173f9cf","name": "All CSS frameworks require JavaScript to style components.","type": "True-False"}],"owner": "62f7ed7c9d4ebd2c0173f9ae"}])

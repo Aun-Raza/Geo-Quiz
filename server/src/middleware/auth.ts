@@ -1,7 +1,8 @@
 /* eslint-disable linebreak-style */
-import config from 'config';
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
 interface CustomRequest extends Request {
   user?: string | jwt.JwtPayload;
@@ -14,7 +15,7 @@ export function auth(req: CustomRequest, res: Response, next: NextFunction) {
     next(new Error('auth token is not provided'));
   }
   try {
-    const decoded = jwt.verify(token, config.get('JWT_PRIVATE_KEY'));
+    const decoded = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
     req.user = decoded;
     next();
   } catch (error) {

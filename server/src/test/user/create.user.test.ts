@@ -1,13 +1,14 @@
 import app from '../../../app';
-import config from 'config';
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { UserModel } from '../../model/user/model.user';
 import { User } from './User';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Basic App & DB Setup
 beforeAll(async () => {
-  await mongoose.connect(config.get('DB_URI'));
+  await mongoose.connect(process.env.DB_URI);
 });
 
 afterAll(async () => {

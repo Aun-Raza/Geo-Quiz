@@ -1,5 +1,4 @@
 /* eslint-disable linebreak-style */
-import config from 'config';
 import cors from 'cors';
 import express from 'express';
 import 'express-async-errors';
@@ -7,6 +6,8 @@ import log from './src/log/logger';
 import MongoDB from './config/connect';
 import router from './src/routes/route';
 import { transports } from 'winston';
+import dotenv from 'dotenv';
+dotenv.config();
 
 let { NODE_ENV } = process.env;
 NODE_ENV = 'development';
@@ -38,7 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(router);
 
-const PORT = config.get('PORT');
+const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
   log.info(`App listening on port: ${PORT}`, { service: 'App' });
 });

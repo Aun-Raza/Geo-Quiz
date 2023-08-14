@@ -4,6 +4,7 @@ import { Schema } from 'mongoose';
 
 interface AbstractQuestion {
   name: string;
+  description: string;
   type: string;
 }
 

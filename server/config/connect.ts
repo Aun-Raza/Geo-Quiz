@@ -1,11 +1,13 @@
 /* eslint-disable linebreak-style */
 import mongoose from 'mongoose';
-import config from 'config';
 import log from '../src/log/logger';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default async function run() {
   try {
-    await mongoose.connect(config.get('DB_URI'));
+    console.log(process.env.PORT);
+    await mongoose.connect(process.env.DB_URI, { dbName: 'js_quiz' });
     log.info('Connected to MongoDB', { service: 'MongoDB' });
   } catch (error) {
     log.error(error.msg, { service: 'MongoDb' });

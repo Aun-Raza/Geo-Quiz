@@ -20,7 +20,7 @@ export async function getQuizzes(req: Request, res: Response) {
 
   const quizDocs = await QuizModel.find().populate({
     path: 'owner',
-    select: 'username email _id',
+    select: 'username _id',
   });
 
   if (!quizDocs.length) {
@@ -29,7 +29,13 @@ export async function getQuizzes(req: Request, res: Response) {
   }
 
   const selectedQuizDocsProps = quizDocs.map((quizDoc) => {
-    return _.pick(quizDoc, ['_id', 'title', 'numQuestions', 'owner']);
+    return _.pick(quizDoc, [
+      '_id',
+      'title',
+      'description',
+      'numQuestions',
+      'owner',
+    ]);
   });
 
   res.json(selectedQuizDocsProps);
@@ -44,7 +50,7 @@ export async function getQuiz(req: Request, res: Response) {
   console.log('ID:', newId);
   const quizDoc = await QuizModel.findById(newId).populate({
     path: 'owner',
-    select: 'username email _id',
+    select: 'username _id',
   });
 
   if (!quizDoc) {
@@ -52,7 +58,9 @@ export async function getQuiz(req: Request, res: Response) {
     throw new Error(`quizId: ${id} does not exist.`);
   }
 
-  res.json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+  res.json(
+    _.pick(quizDoc, ['_id', 'title', 'description', 'questions', 'owner'])
+  );
 }
 
 /**
@@ -95,7 +103,9 @@ export async function createQuiz(req: CustomRequest, res: Response) {
 
     res
       .status(201)
-      .json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+      .json(
+        _.pick(quizDoc, ['_id', 'title', 'description', 'questions', 'owner'])
+      );
   } catch (error) {
     console.error('Error thrown inside createQuiz:', error);
   }
@@ -124,7 +134,11 @@ export async function updateQuiz(req: Request, res: Response) {
     throw new Error(`quizId: ${id} does not exist.`);
   }
 
-  res.status(201).json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+  res
+    .status(201)
+    .json(
+      _.pick(quizDoc, ['_id', 'title', 'description', 'questions', 'owner'])
+    );
 }
 
 /**
@@ -150,5 +164,7 @@ export async function deleteQuiz(req: CustomRequest, res: Response) {
   userDoc.quizzes = filter;
   await userDoc.save();
 
-  res.json(_.pick(quizDoc, ['_id', 'title', 'questions', 'owner']));
+  res.json(
+    _.pick(quizDoc, ['_id', 'title', 'description', 'questions', 'owner'])
+  );
 }
