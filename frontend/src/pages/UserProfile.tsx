@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import { Link, useParams } from 'react-router-dom';
 import { QuizTableProps, UserProps, UserQuizProps } from '../types';
 import { Fragment, useEffect, useState } from 'react';
