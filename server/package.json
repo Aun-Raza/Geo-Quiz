@@ -6,7 +6,7 @@
   "author": "Aun Raza",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon app.ts",
+    "start": "node app.ts",
     "test": "jest --verbose",
     "eslint": "eslint --fix ./"
   },
