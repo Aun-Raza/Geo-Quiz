@@ -14,13 +14,8 @@ NODE_ENV = 'development';
 
 const console = new transports.Console();
 
-if (NODE_ENV === 'test') {
-  console.silent = true;
-  log.add(console);
-} else if (NODE_ENV === 'development') {
-  MongoDB();
-  log.add(console);
-}
+MongoDB();
+log.add(console);
 
 const app = express();
 
